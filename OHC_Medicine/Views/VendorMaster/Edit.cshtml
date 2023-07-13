@@ -1,0 +1,7 @@
+﻿@using OHCModel.Model
+
+@model VendorMasterModel
+@using (Html.BeginForm("Edit", "VendorMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("Vendor");//VendorMaster
+}

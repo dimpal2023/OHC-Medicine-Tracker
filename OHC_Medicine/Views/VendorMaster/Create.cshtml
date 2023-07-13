@@ -1,0 +1,12 @@
+﻿
+@using OHCModel.Model
+
+@model VendorMasterModel
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Create", "VendorMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("Vendor");//VendorMaster
+}

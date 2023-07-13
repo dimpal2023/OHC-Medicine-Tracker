@@ -1,0 +1,114 @@
+﻿@*@using OHCModel.Model
+    @model MonthlyInventoryReportModel*@
+@{
+    ViewBag.Title = "Yearly Inventory Report";
+    int i = 0;
+}
+<style>
+    div.tblscroll {
+        margin: 4px, 4px;
+        padding: 4px;
+        /*  background-color: green;*/
+        width: 100%;
+        height: 600px;
+        overflow-x: auto; /*hidden*/
+        overflow-y: auto;
+        text-align: justify;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Yearly Inventory Report</h3>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Yearly Inventory</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                                <div class="col-sm-3 form-group">
+                                    <label class="required" for="Status">Year</label>
+                                    <select id="ddlyear" class="form-control m-input"> 
+                                        <option>-Select-</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 form-group">
+                                   
+                                    <button class="btn btn-primary mr-2" style="margin-top: 20px;" id="btnSearch" type="button" onclick="SearchData()">Search</button>
+                                </div> 
+                           
+                        </div>
+                        <div class="tblscroll"><br /><br /><br />
+                            <h3>No data found..</h3>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/OHCMonrthyReport-.js"></script>
+<script type="text/javascript">
+    function SearchData() {
+        var year = $('#ddlyear').val();
+        $(".tblscroll").html();
+        /*GetOHCInventoryMonthlyReport(year);*/
+        $.ajax(
+            {
+                type: 'Get',
+                url: '/YearlyInventory/GetOHCMonthlyReport?year=' + year,
+                success:
+                    function (response) {
+                       
+                        if (response == '') {
+                            alert('No data found.');
+                            return;
+                        } else {
+                            $(".tblscroll").html(response);
+                        }
+                        var contents = $(".tblscroll").html();
+                        var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(contents);
+                        var link = document.createElement("a");
+                        document.body.appendChild(link);
+                        var txt = $("#ddlyear option:selected").text();
+                        link.download = "Monthly Inventory Report - " + txt + ".xls"; //You need to change file_name here.
+                        link.href = result;
+                        link.click();
+                    },
+                error:
+                    function (response) {
+                        alert("Error: " + response);
+                    }
+            });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        let dateDropdown = document.getElementById('ddlyear');
+        debugger;
+        let currentYear = new Date().getFullYear();
+        let earliestYear = currentYear+10;
+        while (currentYear <= earliestYear) {
+            debugger
+            let dateOption = document.createElement('option');
+            dateOption.text = currentYear;
+            dateOption.value = currentYear;
+            dateDropdown.add(dateOption);
+            currentYear += 1;
+        }
+    })
+</script>
