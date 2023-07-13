@@ -1,0 +1,665 @@
+﻿@model IEnumerable<OHCModel.Model.DataFieldDatewiseReport>
+
+
+<style>
+    table tr td {
+        border: 1px solid black
+    }
+
+    table tr th {
+        /*color: white;*/
+        border: 1px solid black
+    }
+</style>
+<div>
+    <div>
+
+        <table class="table table-bordered table-responsive bordered" id="tableToExport" style="width:100%;" border="0">
+            <tr style="font-size: 12.5px; background-color:red; color:white ">
+                <td colspan="3"><img src="~/assets/images/karam.png" /></td>
+
+                @if (@ViewBag.Status == 31)
+                {
+                    <td colspan="70" align="center">
+                        <b>
+                            Occupational Health Center First Aid Items Inventory Record
+                            <br />
+                            PN International Pvt Ltd.
+                            <br />
+                            (@ViewBag.month)
+                        </b>
+                    </td>
+                }
+                else
+                {
+
+                    <td colspan="68" align="center">
+                        <b>
+                            Occupational Health Center First Aid Items Inventory Record
+                            <br />
+                            PN International Pvt Ltd.
+                            <br />
+                            (@ViewBag.month)
+                        </b>
+                    </td>
+                }
+
+
+            </tr>
+
+
+
+
+            <tr style="font-size: 12.5px; background-color: #e1acc9 ">
+
+
+                <td colspan="2"><b>Month:-@ViewBag.month @*-2023-Mar-2024*@</b></td>
+                @if (@ViewBag.Status == 31)
+                {
+
+
+                    <td colspan="31" align="center"><b>Purchse Medicine Quantity (Date Wise)</b></td>
+                }
+                else
+                {
+                    <td colspan="30" align="center"><b>Purchse Medicine Quantity (Date Wise)</b></td>
+
+                }
+                <td></td>
+                @if (@ViewBag.Status == 31)
+                {
+                    <td colspan="31" align="center"><b>Issue Medicine Quantity (Date wise)</b></td>
+                }
+
+                else
+                {
+
+                    <td colspan="30" align="center"><b>Issue Medicine Quantity (Date wise)</b></td>
+                }
+
+
+                <td colspan="4" align="center"><b>Grand</b></td>
+
+
+
+
+
+
+            </tr>
+
+            <tr style="font-size: 14px; background-color: #7ecfa1; color: black ">
+
+                <th>
+                    ID
+                </th>
+                <th>
+                    Name of item
+                </th>
+                <th> 1</th>
+                <th> 2</th>
+                <th> 3</th>
+                <th> 4</th>
+                <th> 5</th>
+                <th> 6</th>
+                <th> 7</th>
+                <th> 8</th>
+                <th> 9</th>
+                <th> 10</th>
+                <th> 11</th>
+                <th> 12</th>
+                <th> 13</th>
+                <th> 14</th>
+                <th> 15</th>
+                <th> 16</th>
+                <th> 17</th>
+                <th> 18</th>
+                <th> 19</th>
+                <th> 20</th>
+                <th> 21</th>
+                <th> 22</th>
+                <th> 23</th>
+                <th> 24</th>
+                <th> 25</th>
+                <th> 26</th>
+                <th> 27</th>
+                <th> 28</th>
+                <th> 29</th>
+                <th> 30</th>
+
+                @if (@ViewBag.Status == 31)
+                {
+                    <th> 31</th>
+                }
+
+
+
+
+                <th>
+                    Name of item
+                </th>
+                <th> 1</th>
+                <th> 2</th>
+                <th> 3</th>
+                <th> 4</th>
+                <th> 5</th>
+                <th> 6</th>
+                <th> 7</th>
+                <th> 8</th>
+                <th> 9</th>
+                <th> 10</th>
+                <th> 11</th>
+                <th> 12</th>
+                <th> 13</th>
+                <th> 14</th>
+                <th> 15</th>
+                <th> 16</th>
+                <th> 17</th>
+                <th> 18</th>
+                <th> 19</th>
+                <th> 20</th>
+                <th> 21</th>
+                <th> 22</th>
+                <th> 23</th>
+                <th> 24</th>
+                <th> 25</th>
+                <th> 26</th>
+                <th> 27</th>
+                <th> 28</th>
+                <th> 29</th>
+                <th> 30</th>
+                @if (@ViewBag.Status == 31)
+                {
+                    <th> 31</th>
+                }
+
+
+
+
+                <th> Purchase Total</th>
+
+                <th> Issue  Total</th>
+                <th> Previous  Month Total</th>
+                <th> Balance</th>
+            </tr>
+
+            @if (Model.Count() != 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr style="font-size:12.5px">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @item.MedicineName
+                        </td>
+
+                        <td>
+                            @if (@item.Day1.ToString() != "0")
+                            {@item.Day1 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day2.ToString() != "0")
+                            {@item.Day2 }
+                        else
+                        {<span></span>}
+                        </td>
+
+
+
+
+                        <td>
+                            @if (@item.Day3.ToString() != "0")
+                            {@item.Day3 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day4.ToString() != "0")
+                            {@item.Day4 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day5.ToString() != "0")
+                            {@item.Day5 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day6.ToString() != "0")
+                            {@item.Day6 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day7.ToString() != "0")
+                            {@item.Day7 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day8.ToString() != "0")
+                            {@item.Day8 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day9.ToString() != "0")
+                            {@item.Day9 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day10.ToString() != "0")
+                            {@item.Day10 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day11.ToString() != "0")
+                            {@item.Day11 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day12.ToString() != "0")
+                            {@item.Day12 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day13.ToString() != "0")
+                            {@item.Day13 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day14.ToString() != "0")
+                            {@item.Day14 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day15.ToString() != "0")
+                            {@item.Day15 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day16.ToString() != "0")
+                            {@item.Day16 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day17.ToString() != "0")
+                            {@item.Day17 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day18.ToString() != "0")
+                            {@item.Day18 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day19.ToString() != "0")
+                            {@item.Day19 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day20.ToString() != "0")
+                            {@item.Day20 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day21.ToString() != "0")
+                            {@item.Day21 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day22.ToString() != "0")
+                            {@item.Day22 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day23.ToString() != "0")
+                            {@item.Day23 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day24.ToString() != "0")
+                            {@item.Day24 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day25.ToString() != "0")
+                            {@item.Day25 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day26.ToString() != "0")
+                            {@item.Day26 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day27.ToString() != "0")
+                            {@item.Day27 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day28.ToString() != "0")
+                            {@item.Day28 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day29.ToString() != "0")
+                            {@item.Day29 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.Day30.ToString() != "0")
+                            {@item.Day30 }
+                        else
+                        {<span></span>}
+                        </td>
+                        @*<td> @item.Day31</td>*@
+                        @if (@ViewBag.Status == 31)
+                        {
+                            @*<td> @item.Day31</td>*@
+
+                            <td>
+                                @if (@item.Day31.ToString() != "0")
+                                {@item.Day31 }
+                            else
+                            {<span></span>}
+                            </td>
+
+
+
+                        }
+
+
+
+
+                        <td>
+                            @item.MedicineName
+                        </td>
+
+                        <td>
+                            @if (@item.IssueDay1.ToString() != "0")
+                            {@item.IssueDay1 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay2.ToString() != "0")
+                            {@item.IssueDay2 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay3.ToString() != "0")
+                            {@item.IssueDay3 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay4.ToString() != "0")
+                            {@item.IssueDay4 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay5.ToString() != "0")
+                            {@item.IssueDay5 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay6.ToString() != "0")
+                            {@item.IssueDay6 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay7.ToString() != "0")
+                            {@item.IssueDay7 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay8.ToString() != "0")
+                            {@item.IssueDay8 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay9.ToString() != "0")
+                            {@item.IssueDay9 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay10.ToString() != "0")
+                            {@item.IssueDay10 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay11.ToString() != "0")
+                            {@item.IssueDay11 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay12.ToString() != "0")
+                            {@item.IssueDay12 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay13.ToString() != "0")
+                            {@item.IssueDay13 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay14.ToString() != "0")
+                            {@item.IssueDay14 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay15.ToString() != "0")
+                            {@item.IssueDay15 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay16.ToString() != "0")
+                            {@item.IssueDay16 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay17.ToString() != "0")
+                            {@item.IssueDay17 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay18.ToString() != "0")
+                            {@item.IssueDay18 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay19.ToString() != "0")
+                            {@item.IssueDay19 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay20.ToString() != "0")
+                            {@item.IssueDay20 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay21.ToString() != "0")
+                            {@item.IssueDay21 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay22.ToString() != "0")
+                            {@item.IssueDay22 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay23.ToString() != "0")
+                            {@item.IssueDay23 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay24.ToString() != "0")
+                            {@item.IssueDay24 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay25.ToString() != "0")
+                            {@item.IssueDay25 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay26.ToString() != "0")
+                            {@item.IssueDay26 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay27.ToString() != "0")
+                            {@item.IssueDay27 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay28.ToString() != "0")
+                            {@item.IssueDay28 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay29.ToString() != "0")
+                            {@item.IssueDay29 }
+                        else
+                        {<span></span>}
+                        </td>
+                        <td>
+                            @if (@item.IssueDay30.ToString() != "0")
+                            {@item.IssueDay30 }
+                        else
+                        {<span></span>}
+                        </td>
+
+
+
+
+                        @if (@ViewBag.Status == 31)
+                        {
+                            @*<td> @item.IssueDay31</td>*@
+
+                            <td>
+                                @if (@item.IssueDay31.ToString() != "0")
+                                {@item.IssueDay31 }
+                            else
+                            {<span></span>}
+                            </td>
+
+
+
+
+
+                        }
+
+                        <td>
+                            @if (@item.Purchasetotal.ToString() != "0")
+                            {@item.Purchasetotal }
+                        else
+                        {<span></span>}
+
+                            @*@Html.DisplayFor(modelItem => item.Purchasetotal)*@
+                        </td>
+                        <td>
+                            @if (@item.Issuetotal.ToString() != "0")
+                            {@item.Issuetotal }
+                        else
+                        {<span></span>}
+                            @*@Html.DisplayFor(modelItem => item.Issuetotal)*@
+                        </td>
+                        <td>
+                            @if (@item.PreviousMonthtotal.ToString() != "0")
+                            {@item.PreviousMonthtotal }
+                        else
+                        {<span></span>}
+
+
+                            @*@Html.DisplayFor(modelItem => item.PreviousMonthtotal)*@
+                        </td>
+
+
+                        <td>
+                            @if (@item.Balance.ToString() != "0")
+                            {@item.Balance }
+                        else
+                        {<span></span>}
+
+                            @*@Html.DisplayFor(modelItem => item.Balance)*@
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="11">
+                        <span>No Data found</span>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btnExport").click(function () {
+            $("input[name='GridHtml']").val($("#Grid").html());
+        });
+    });
+</script>
+
+
+

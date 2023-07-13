@@ -1,0 +1,1115 @@
+﻿@model OHCModel.Model.MedicinePrescribeModel
+<style>
+    /*.form-control {
+        display: block;
+        width: 47%;
+    }*/
+    .table thead th {
+        border-top: 0;
+        border-bottom-width: 1px;
+        font-family: "Rubik", sans-serif;
+        font-weight: 500;
+        padding-left: 100px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        font-size: 0.875rem;
+        line-height: 1;
+        white-space: nowrap;
+        padding: 4px 0px 5px 25px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+
+    .table thead {
+        background-color: #cfdaed;
+    }
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+
+    .select2-container {
+        box-sizing: border-box;
+        display: block;
+        margin: 0;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .hidden1 {
+        display: none;
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">OPD Patient</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page">OPD Patient</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">OPD Patient</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="required" for="EmployeeId">Employee Name</label>
+                                    @Html.TextBoxFor(m => m.EmployeeCode, new { @id = "txtEmployeeCode", @Placeholder = "Search Employee Code", @class = "form-control" })
+                                    @*@Html.ValidationMessageFor(m => m.EmployeeCode, "", new { @class = "m-form__help" })*@
+                                    @Html.HiddenFor(m => m.DepartmentID)
+                                    <span class="m-form__help empcodevalidate"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-top: 14%;">
+                                    <label for="EmployeeName">Is Outside Employee</label>
+                                    @Html.CheckBoxFor(m => m.IsOutsideWorker, new { @id = "chkOutsideworker" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <table class="table-responsive">
+                                        <tbody>
+                                            <tr>
+                                                <td>@Html.TextBoxFor(m => m.EmployeeName, new { @id = "txtEmployeeName", @Placeholder = "Employee Name", @class = "form-control", @required = "required", @readonly = true })@Html.ValidationMessageFor(m => m.EmployeeName, "", new { @class = "m-form__help" })</td>
+                                                <td>@Html.TextBoxFor(m => m.MasterDepartment, new { @id = "txtDepartment", @Placeholder = "Department", @class = "form-control", @required = "required", @readonly = true })@Html.ValidationMessage("", "", new { @class = "m-form__help" })</td>
+                                                <td id="DDLUNIT" style="display:none">@Html.DropDownListFor(m => m.Unit, Model._UnitList, new { @id = "ddlUnit", @class = "form-control  m-input" })@Html.ValidationMessageFor(m => m.Unit, "", new { @class = "m-form__help" })</td>
+                                                <td>@Html.TextBoxFor(m => m.Mobile, new { @id = "txtMobile", @Placeholder = "Mobile", @class = "form-control", @required = "required", @maxlength = "10", @minlength = "10", @onkeypress = "return event.charCode >= 48 && event.charCode <= 57" })@Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "m-form__help" })</td>
+                                                <td>@Html.TextBoxFor(m => m.EmergencyContactNo, new { @id = "txtEmergencyContact", @Placeholder = "Emergency Contact", @class = "form-control", @maxlength = "10", @minlength = "10", @onkeypress = "return event.charCode >= 48 && event.charCode <= 57" })@Html.ValidationMessage("", new { @class = "m-form__help" })</td>
+                                                <td>@Html.TextBoxFor(m => m.DOB, new { @id = "txtDOB", @type = "Date", @Placeholder = "DOB", @class = "form-control", @onchange = "return ValidateDOB();" })<span class="m-form__help txtempagecount"></span> @*@Html.ValidationMessageFor(m => m.DOB, "", new { @class = "m-form__help" })*@</td>
+                                                <td>@Html.TextBoxFor(m => m.Address, new { @id = "txtAddress", @Placeholder = "Address", @class = "form-control" })@Html.ValidationMessage("", "", new { @class = "m-form__help" })</td>
+                                                <td id="CompanyName" style="display:none">@Html.TextBoxFor(m => m.CompanyName, new { @id = "txtCompanyName", @Placeholder = "Company Name", @class = "form-control" }) @Html.ValidationMessageFor(m => m.RoleType, "", new { @class = "m-form__help" })</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="required" for="Time">Gender</label>
+                                    @Html.DropDownListFor(model => model.Gender, new List<SelectListItem> { new SelectListItem { Text = "Male", Value = "Male", Selected = true }, new SelectListItem { Text = "Female", Value = "Female" } }, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="required" for="Date">Date</label>
+                                    @if (Model.Date == null)
+                                    {@Html.TextBoxFor(m => m.Date, new { @id = "txtdate", @class = "form-control m-input", @Type = "Date", @Value = DateTime.Now.ToString("yyyy-MM-dd") })}
+                                else
+                                {@Html.TextBoxFor(m => m.Date, new { @id = "txtdate", @class = "form-control m-input", @Type = "Date" })}
+
+                                    @Html.ValidationMessageFor(m => m.Date, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="required" for="Time">Time</label>
+                                    @if (Model.Time == null)
+                                    {
+                                        @Html.TextBoxFor(m => m.Time, new { @id = "txtTime", @Placeholder = "Time", @class = "form-control", @required = "required", @Type = "Time", @Value = DateTime.Now.ToString("HH:mm") })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.Time, new { @id = "txtTime", @Placeholder = "Time", @class = "form-control", @required = "required", @Type = "Time" })
+                                    }
+
+                                    @Html.ValidationMessageFor(m => m.Time, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="required" for="Problem">Chief Complaint</label>
+                                    @Html.TextAreaFor(m => m.Problem, new { @id = "Problem", @rows = "17", @placeholder = "Write here", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Problem, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="CheckUp" style="margin-top: 10%;">Vital Checkup</label>
+                                    @Html.CheckBoxFor(m => m.VitalCheckUp, new { @id = "chkCheckup", @style = "margin-top:10%;" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="SuggestedBy">Suggested By</label>
+                                    @Html.DropDownListFor(model => model.SuggestedBy, new List<SelectListItem> { new SelectListItem { Text = "Nurse", Value = "Nurse", Selected = true }, new SelectListItem { Text = "Doctor", Value = "Doctor" }, new SelectListItem { Text = "Other", Value = "Other" } }, new { @class = "form-control", @id = "ddlSuggestedBy", @onchange = "return OpenTextBox();" })
+                                    @Html.ValidationMessageFor(m => m.SuggestedBy, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3 SDetails" style="display:none">
+                                <div class="form-group">
+                                    <label class="required" for="SuggestedBy">Detail</label>
+                                    @Html.TextBoxFor(m => m.SuggestedDetails, new { @id = "txtSuggestedDetails", @placeholder = "Write here", @class = "form-control" })
+                                    @*@Html.ValidationMessageFor(m => m.SuggestedDetails, "", new { @class = "m-form__help" })*@
+                                    <span class="m-form__help SuggestedDetailsvalidate"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="CheckUp" style="margin-top: 10%;">First Aid Treatment</label>
+                                    @Html.CheckBoxFor(m => m.FirstAidCheckUp, new { @id = "chkfirstAidCheckup", @style = "margin-top:10%;" })
+                                </div>
+                            </div>
+                            <div class="col-sm-8" id="divTreatment">
+                                <div class="form-group">
+                                    <label for="Treatment">Treatment</label>
+                                    @Html.TextAreaFor(m => m.Treatment, new { @id = "txtTreatment", @class = "form-control m-input", @rows = "17", @placeholder = "Write here" })
+                                    @*@Html.ValidationMessageFor(m => m.Treatment, "", new { @class = "m-form__help" })*@
+                                    <span class="m-form__help txtTreatmentvalidate"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered" id="tblParticipantList">
+                            <thead>
+                                <tr style="height: 35px;">
+                                    <th style="width:33%;" class="required">Medicine</th>
+                                    <th style="width:20%;">Available Quantity</th>
+                                    <th class="required">QTY</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_posts_body">
+                                @if (Model._DetailsofMedicineList2 != null)
+                                {
+                                    for (int i = 0; i < Model._DetailsofMedicineList2.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <select id="DDLMedicine" class="form-control m-input req1 requere" name="Medicine" onchange='GetCust(this); GetMedicineDetail(this)' style="width:89%;">
+                                                        @foreach (SelectListItem option in Model._MedicineList)
+                                                        {
+                                                            <option value="@option.Value" @(option.Value == Model._DetailsofMedicineList2[i].Medicinename ? "selected='selected'" : "")>@option.Text</option>
+                                                        }
+                                                    </select>
+                                                    @Html.HiddenFor(m => m._DetailsofMedicineList2[i].Medicinename, new { @class = "HdnPlan2" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @Html.TextBoxFor(m => m._DetailsofMedicineList2[i].AvailableQty, new { @id = "txtAvlQty", @Class = "medavlqty form-control m-input medavlqty req2", @style = "width:89%;", @ReadOnly = "true", @onkeypress = "return isNumberKey(event,this)" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @Html.TextBoxFor(m => m._DetailsofMedicineList2[i].Qty, new { @Class = "form-control m-input medqty req2", @style = "width:89%;", @onkeypress = "return isNumberKey(event,this)", @onchange = "return CheckAvlQuantity(this)" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @Html.TextBoxFor(m => m._DetailsofMedicineList2[i].Remark, new { @Class = "form-control m-input", @style = "width:89%;" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="btn btn-danger" style="background-color: #64141f;" id="delete" onclick='Remove(this)'>Remove</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <select id="ddlMedicine" style="width:89%;" class="form-control m-input req1" onchange="GetMedicineDetail(this);">
+                                            @foreach (SelectListItem option1 in Model._MedicineList)
+                                            {
+                                                <option value="@option1.Value">@option1.Text</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtAvailableQuantity" class="form-control m-input medavlqty" style="width:89%;" onkeypress='return isNumberKey(event,this)' disabled="disabled1" />
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtQuantity" class="form-control m-input medqty" style="width:89%;" onkeypress='return isNumberKey(event,this)' onchange="CheckAvlQuantity(this)" />
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtRemark" class="form-control m-input medbatch" style="width:89%;" />
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="btn btn-primary" id="addnewrow" title="Add"><span class="mdi mdi-plus"></span></a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="CheckUp" style="margin-top: 10%;">Is Reffered</label>
+                                    @Html.CheckBoxFor(m => m.IsReffered, new { @id = "chkReffered", @style = "margin-top:10%;" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row" id="tblreffer" style="display:none;">
+                            <div class="col-sm-12">
+                                <table class="table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            @*<td>@Html.TextBoxFor(m => m.HospitalName, new { @id = "txtHospitalName", @Placeholder = "Hospital Name", @class = "form-control", @required = "required" })@Html.ValidationMessageFor(m => m.HospitalName, "", new { @class = "m-form__help" })</td>*@
+                                            <td>@Html.TextBoxFor(m => m.HospitalName, new { @id = "txtHospitalName", @Placeholder = "Hospital Name", @class = "form-control", @required = "required" })<span class="m-form__help txtHospitalNametvalidate"></span></td>
+                                            @*<td>@Html.TextBoxFor(m => m.AttendeeName, new { @id = "txtAttendeeName", @Placeholder = "First Aider", @class = "form-control" })@Html.ValidationMessageFor(m => m.AttendeeName, "", new { @class = "m-form__help" })</td>*@
+                                            <td>@Html.TextBoxFor(m => m.AttendeeName, new { @id = "txtAttendeeName", @Placeholder = "First Aider", @class = "form-control" })<span class="m-form__help txtAttendeeNameNametvalidate"></span></td>
+                                            <td style="display:none" class="AttendeeNameIfOutSide">@Html.TextBoxFor(m => m.AttendeeName, new { @id = "txtAttendeeNameIfOutSide", @Placeholder = "First Aider", @class = "form-control" })<span class="m-form__help txtAttendeeNameIfOutSidevalidate"></span></td>
+                                            @*<td>@Html.TextBoxFor(m => m.AttendeeMobileNumber, new { @id = "txtAttendeeMobileNumber", @Placeholder = "Mobileno", @class = "form-control", @maxlength = "10", @minlength = "10", })@Html.ValidationMessageFor(m => m.AttendeeMobileNumber, "", new { @class = "m-form__help" })</td>*@
+                                            <td>@Html.TextBoxFor(m => m.AttendeeMobileNumber, new { @id = "txtAttendeeMobileNumber", @Placeholder = "Mobileno", @class = "form-control", @maxlength = "10", @minlength = "10", @onkeypress = "return event.charCode >= 48 && event.charCode <= 57" })<span class="m-form__help txtAttendeeMobilevalidate"></span></td>
+
+                                            <td>
+                                                @Html.DropDownListFor(m => m.RefferbyVehicle, new List<SelectListItem>
+                                                                    {
+                                                                        new SelectListItem {Text = "Bike", Value = "Bike", Selected = true },
+                                                                      new SelectListItem {Text = "Ambulance", Value = "Ambulance" },
+                                                                    }, new { @class = "form-control  m-input", @style = "width: 150px;", @id = "ddlRefferbyVehicle", @onchange = "return ReferByVehicleDetails();" })@Html.ValidationMessage("", "", new { @class = "m-form__help" })
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DropDownListFor(m => m.PatientStatus, new List<SelectListItem>
+                                                                                        {
+                                                                                            new SelectListItem {Text = "Open", Value = "Open", Selected = true },
+                                                                                            new SelectListItem {Text = "Close", Value = "Close" }
+                                                                                        }, new { @id = "ddlpatientStatus", @class = "form-control  m-input", @style = "width: 150px;", @onchange = "return PatientStatusDetails();" })@Html.ValidationMessage("", "", new { @class = "m-form__help" })
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr class="patientstatus" style="display:none">
+
+                                                                                    <td>@Html.TextAreaFor(m => m.PatientStatusCloseDiscription, new { @id = "txtPatientStatusDiscription", @Placeholder = "Close Discription", @class = "form-control" })<span class="m-form__help txtPatientStatusDiscriptionvalidate"></span></td>
+                                                                                    <td>
+                                                                                        @Html.DropDownListFor(m => m.PatientFitnessCertificate, new List<SelectListItem>
+                                                                                                                                                                        {new SelectListItem {Text = "--Fitness Certificate--", Value = "0", Selected = true },
+                                                                                                                                                                            new SelectListItem {Text = "Yes", Value = "Yes"},
+                                                                                                                                                                            new SelectListItem {Text = "No", Value = "No" }
+                                                                                                                                                                        }, new { @class = "form-control  m-input", @style = "width: 150px;", @id = "ddlpatientfitnesscertificate" })<span class="m-form__help txtpatientfitnesscertificatevalidate"></span>
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                                <tr class="referbyothervehicle" style="display:none">
+                                                                                    <td>@Html.TextAreaFor(m => m.ReferbyOtherVehicle, new { @id = "txtReferbyOtherVehicle", @Placeholder = "Vehicle Detail", @class = "form-control" })<span class="m-form__help txtReferbyOtherVehiclevalidate"></span></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <br />
+                                                                @if (Model.Id == 0)
+                                                                {
+                                                                    <button type="submit" class="btn btn-primary mr-2 btnSave"> Submit </button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button type="submit" class="btn btn-primary mr-2 btnSave"> Update </button>
+                                                                }
+                                                                <button type="button" class="btn btn-light" onclick="location.href='@Url.Action("List", "MedicinePrescribe")'">Cancel</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="partialDivds" style="display:none">
+                                            <br /><br /><br />
+                                            <h3>No data found..</h3>
+                                            <div id="editor"></div>
+                                        </div>
+                                        <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+                                        <link href="~/assets/css/jquery.ui.css" rel="stylesheet" />
+                                        <script src="~/assets/js/jquery-ui.js"></script>
+                                        <script src="~/assets/js/moment.min.js"></script>
+                                        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>*@
+                                        <script type="text/javascript">
+                                            function GetCust(e) {
+
+                                                var vdv = $(e).closest("tr").find("#DDLMedicine option:selected").val();
+                                                $(e).closest("tr").find(".HdnPlan2").attr('value', vdv);
+                                            }
+                                            $("#addnewrow").on("click", function () {
+                                                //Reference the Name and Country TextBoxes.
+                                                var txtMedicine = $("#ddlMedicine option:selected");
+                                                var txtQuantity = $("#txtQuantity");
+                                                var txtAvailableQuantity = $("#txtAvailableQuantity");
+                                                var txtRemark = $("#txtRemark");
+                                                var rowcount = $("#tblParticipantList > tbody > tr").length;
+                                                var name1 = "_DetailsofMedicineList2[" + rowcount + "].Medicinename";
+                                                var name2 = "_DetailsofMedicineList2[" + rowcount + "].Qty";
+                                                var name4 = "_DetailsofMedicineList2[" + rowcount + "].AvailableQty";
+                                                var name3 = "_DetailsofMedicineList2[" + rowcount + "].Remark";
+                                                var PlanHtml = "";
+                                                $('#ddlMedicine option').each(function () {
+                                                    if ($("#ddlMedicine option:selected").val() == $(this).val()) {
+                                                        PlanHtml += "<option value=" + $(this).val() + " name=" + name1 + " selected>" + $(this).text() + "</option>";
+                                                    } else {
+                                                        PlanHtml += "<option value=" + $(this).val() + " name=" + name1 + ">" + $(this).text() + "</option>";
+                                                    }
+                                                });
+                                                var textbox = $("<tr><td><select class='form-control m-input req1' style=width:89%; onchange='GetMedicineDetail(this);'>" + PlanHtml + "</select></td >"
+                                                    + "<td style=display:none><input type='hidden' class='form-control m-input' value='" + txtMedicine.val() + "' name='" + name1 + "'></td >"
+                                                    + "<td><input type='text' class='form-control m-input medavlqty' style=width:89%; onkeypress='return isNumberKey(event,this)' disabled='disabled' value='" + txtAvailableQuantity.val() + "' name='" + name4 + "'></td >"
+                                                    + "<td><input type='text' class='form-control m-input medqty req2' style=width:89%; onkeypress='return isNumberKey(event,this)' onchange='CheckAvlQuantity(this)' value='" + txtQuantity.val() + "' name='" + name2 + "'></td >"
+                                                    + "<td><input type='text' class='form-control m-input' style=width:89%; value='" + txtRemark.val() + "' name='" + name3 + "'></td >"
+                                                    + "<td><input type='button' class='btn btn-danger' value='Remove' onclick='Remove(this);'></td >"
+                                                    + "</tr > ");
+                                                $("#tblParticipantList tbody").append(textbox);
+                                                //Clear the TextBoxes.
+                                                $("#ddlMedicine").select2("val", 0);
+                                                $("#txtQuantity").val("");
+                                                $("#txtAvailableQuantity").val("");
+                                                $("#txtRemark").val("");
+                                            });
+                                            function CheckAvlQuantity(e) {
+
+                                                var row = $(e).closest("tr");
+                                                var qty1 = $(row).find(".medqty").val();
+                                                var avlqty2 = $(row).find(".medavlqty").val();
+                                                if (qty1 <= 0) {
+                                                    $(row).find(".medqty").css("border", "1px solid red");
+                                                    flag = true;
+                                                    $(row).find(".medqty").val('');
+                                                    toastr.warning('Please enter quantity greater than 0.');
+                                                }
+                                                else if (parseInt(qty1) > parseInt(avlqty2)) {
+                                                    $(row).find(".medqty").css("border", "1px solid red");
+                                                    flag = true;
+                                                    $(row).find(".medqty").val('');
+                                                    toastr.warning('Quantity is not greater than available quantity.');
+                                                }
+                                                else if (qty1 == null || qty1 == "") {
+                                                    $(row).find(".medqty").css("border", "1px solid red");
+                                                    flag = true;
+                                                    alert('Please enter quantity.');
+                                                }
+                                                else {
+                                                    $(row).find(".medqty").css("border", "1px solid lightgray");
+                                                }
+                                            }
+                                            function Remove(button) {
+                                                //Determine the reference of the Row using the Button.
+                                                var row = $(button).closest("tr");
+                                                var name = $("td", row).eq(0).html();
+                                                if (confirm("Do you want to delete selected row.")) {
+                                                    //Get the reference of the Table.
+                                                    var table = $("#tblParticipantList")[0];
+                                                    //Delete the Table row using it's Index.
+                                                    table.deleteRow(row[0].rowIndex);
+                                                }
+                                            };
+                                            $(".btnSave").click(function () {
+
+                                                var flag = false
+                                                var allmed = '';
+                                                $("#tblParticipantList tbody tr").each(function () {
+
+
+                                                    if ($(this).find('.req1').val() == "0") {
+                                                        $(this).find('.req1').css("border", "1px solid red");
+                                                        flag = true;
+                                                    } else {
+                                                        $(this).find('.req1').css("border", "1px solid lightgray");
+                                                    }
+                                                    if ($(this).find('.req2').val() == "") {
+                                                        $(this).find('.req2').css("border", "1px solid red");
+                                                        flag = true;
+                                                    } else {
+                                                        $(this).find('.req2').css("border", "1px solid lightgray");
+                                                    }
+                                                    //if ($(this).find('.req3').val() == "") {
+                                                    //    $(this).find('.req3').css("border", "1px solid red");
+                                                    //    flag = true;
+                                                    //} else {
+                                                    //    $(this).find('.req3').css("border", "1px solid lightgray");
+                                                    //}
+                                                    var valMedicine = $(this).find('select.req1  option:selected').val();
+                                                    var txtMedicine = $(this).find('select.req1  option:selected').text();
+                                                    var medqty = $(this).find('input.req2').val();
+                                                    var medavlqty = $(this).find('input.medavlqty').val();
+                                                    //$(this).find('.req1').css("color", "black");
+                                                    //$(this).find('.req2').css("color", "black");
+
+                                                    if (parseInt(medqty) > parseInt(medavlqty)) {
+                                                        alert('Quantity is not greater than available quantity.');
+                                                        $(this).find('.req2').css("border", "1px solid red");
+                                                        $(this).find('.req2').val('');
+                                                        event.preventDefault();
+                                                    }
+                                                    allmed = allmed + valMedicine + ","
+                                                    /*Duplicate Medicine validation */
+                                                    if (txtMedicine == "--Select--") {
+                                                        $(this).find('.req1').css('border-color', 'red');
+                                                        toastr.warning('Please select medicine');
+                                                        event.preventDefault();
+                                                    }
+
+                                                    var medcntbymed = allmed.split(valMedicine + ",").length - 1
+                                                    var dd = countRepeatedWords(allmed);
+                                                    if (dd == 2) {
+                                                        if (medcntbymed >= 2) {
+                                                            $(this).find('.req1').css('border-color', 'red');
+                                                        }
+                                                        else {
+
+                                                            //$(this).find('.req1').css("border-color", "gray");
+                                                        }
+                                                    }
+                                                    /*--------------------*/
+                                                })
+                                                var cc = countRepeatedWords(allmed);
+                                                if (cc == 2) {
+
+                                                    $(this).find('.req1').css("border", "1px solid red");
+                                                    toastr.warning('Duplicate medicine  not allowed.');
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+                                                if (flag) {
+                                                    return false;
+                                                }
+
+                                            })
+                                            function countRepeatedWords(sentence) {
+                                                let words = sentence.split(",");
+                                                let wordMap = {};
+                                                var cnt = 0;
+                                                for (let i = 0; i < words.length; i++) {
+                                                    let currentWordCount = wordMap[words[i]];
+                                                    let count = currentWordCount ? currentWordCount : 0;
+                                                    wordMap[words[i]] = count + 1;
+                                                    if (count > 0) {
+                                                        cnt = 2;
+                                                    }
+                                                }
+                                                return cnt;
+                                            }
+                                        </script>
+                                        <script>
+$("#txtEmployeeCode").autocomplete({
+        max: 10,
+        minLength: 1,
+        source: function (request, response) {
+            $.ajax({
+                url: "/Utility/FindEmployee_Data",
+                datatype: "json",
+                data: {
+                    Type: 1,
+                    query: $('#txtEmployeeCode').val()
+                },
+                success: function (data) {
+                    if (!data.length) {
+                        var result = [{ label: "no results", value: response.term }];
+                        response(result);
+                    }
+                    else {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Name + ' - ' + val.Empid,
+                                value: val.Empid,
+                                empname: val.Name,
+                                empemail: val.EMAIL,
+                                empdepartment: val.DepartMent,
+                                empMobile: val.Mobile,
+                                empDob: val.Dob,
+                                empaddress: val.Address,
+                                empRole: val.EmpType,
+                            }
+                        }))
+                    }
+                }
+            })
+        },
+        select: function (event, ui) {
+
+            $("#txtEmployeeName").val(ui.item.empname);
+            $("#txtEmail").val(ui.item.empemail);
+            $("#txtDepartment").val(ui.item.empdepartment);
+            $("#txtMobile").val(ui.item.empMobile);
+            if (ui.item.empDob != null) {
+
+                $("#txtDOB").val(moment(ui.item.empDob).format('YYYY-MM-DD'));
+                ValidateDOB();
+            }
+
+            $("#txtAddress").val(ui.item.empaddress);
+            $("#txtRoleType").val(ui.item.empRole);
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+
+$("#txtAttendeeName").autocomplete({
+                                                                        max: 10,
+                                                                        minLength: 1,
+                                                                        source: function (request, response) {
+                                                                            $.ajax({
+                                                                                url: "/Utility/FindEmployee_Data",
+                                                                                datatype: "json",
+                                                                                data: {
+                                                                                    Type: 1,
+                                                                                    query: $('#txtAttendeeName').val()
+                                                                                },
+                                                                                success: function (data) {
+                                                                                    if (!data.length) {
+                                                                                        var result = [{ label: "no results", value: response.term }];
+                                                                                        response(result);
+                                                                                    }
+                                                                                    else {
+                                                                                        response($.map(data, function (val, item) {
+                                                                                            return {
+                                                                                                label: val.Name + ' - ' + val.Empid,
+                                                                                                /*value: val.Empid,*/
+                                                                                                value: val.Name + ' - ' + val.Empid,
+                                                                                                empname: val.Name,
+                                                                                                empMobile: val.Mobile
+                                                                                            }
+                                                                                        }))
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        },
+                                                                        select: function (event, ui) {
+
+                                                                            $("#txtAttendeeMobileNumber").val(ui.item.empMobile);
+                                                                            $('#txtAttendeeName').val(ui.item.value);
+                                                                        },
+                                                                        open: function () {
+                                                                            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                                                                        },
+                                                                        close: function () {
+                                                                            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                                                                        }
+                                                                    });
+
+    $(function () {
+        enable_cb();
+        enable_rcb();
+        enable_facb();
+        $("#chkOutsideworker").click(enable_cb);
+        $("#chkReffered").click(enable_rcb);
+        $("#chkfirstAidCheckup").click(enable_facb);
+    });
+    function enable_cb() {
+
+        if (this.checked) {
+
+            $("#txtEmployeeName").removeAttr("readonly");
+            $("#txtDepartment").removeAttr("readonly");
+            $("#txtDepartment").hide();
+            $("#DDLUNIT").show();
+            $("#DDLDEPARTMENT").show();
+            $(".AttendeeNameIfOutSide").show();
+            $("#txtAttendeeName").hide();
+            CreateDrpforrefferbyother();
+            //$("#ddlRefferbyVehicleOther").show();
+            $("#CompanyName").show();
+            $("#txtEmail").removeAttr("readonly");
+            /*$("#txtMobile").removeAttr("readonly");*/
+            /*$("#txtDOB").removeAttr("readonly");*/
+            //$("#txtAddress").removeAttr("readonly");
+            //$("#txtRoleType").removeAttr("readonly");
+            $("#txtCompanyName").removeAttr("readonly");
+            $("#txtEmployeeCode").attr("readonly", true);
+        } else {
+
+            $("#txtEmployeeName").attr("readonly", true);
+            $("#txtDepartment").attr("readonly", true);
+            $("#txtDepartment").show();
+            $("#DDLUNIT").hide();
+            $("#DDLDEPARTMENT").hide();
+            //$("#ddlRefferbyVehicleOther").hide();
+            $("#CompanyName").hide();
+            $("#txtEmail").attr("readonly", true);
+            //$("#txtMobile").attr("readonly", true);
+            //$("#txtDOB").attr("readonly", true);
+            //$("#txtAddress").attr("readonly", true);
+            //$("#txtRoleType").attr("readonly", true);
+            $("#txtCompanyName").attr("readonly", true);
+            $("#txtEmployeeCode").removeAttr("readonly");
+        }
+        $(".btnSubmit").click(function () {
+            var chkval = $("#chkOutsideworker").val();
+            if (chkval == "false") {
+                $(".empcodevalidate").text('Please Enter The EmployeeCode');
+                return true
+            }
+        })
+
+    }
+    function enable_rcb()
+    {
+
+        if (this.checked) {
+            $('#tblreffer').show();
+        }
+        else {
+            $('#tblreffer').hide();
+        }
+    }
+    function enable_facb()
+    {
+
+        if (this.checked) {
+            $('#divTreatment').show();
+            $('#tblParticipantList').show();
+        }
+        else {
+            $('#divTreatment').hide();
+            $('#tblParticipantList').hide();
+        }
+    }
+    $(document).ready(function () {
+        debugger;
+        if (@Html.Raw(Json.Encode(Model.IsReffered)) == true) {
+            $('#tblreffer').show();
+        }
+        if (@Html.Raw(Json.Encode(Model.FirstAidCheckUp)) == true) {
+            $('#divTreatment').show();
+            $('#tblParticipantList').show();
+        }
+            if (@Html.Raw(Json.Encode(Model.IsOutsideWorker)) == true) {
+                //$("#txtUserName").removeAttr("readonly");
+                debugger;
+                //$("#txtEmployeeCode").attr("readonly", true);
+                $("#txtEmployeeName").removeAttr("readonly");
+                $("#txtDepartment").removeAttr("readonly");
+                $("#txtDepartment").hide();
+                /*$("#ddlRefferbyVehicleOther").show();*/
+                CreateDrpforrefferbyother();
+                $("#DDLUNIT").show();
+                $("#DDLDEPARTMENT").show();
+                $("#CompanyName").show();
+                $("#txtEmail").removeAttr("readonly");
+                //$("#txtMobile").removeAttr("readonly");
+                /*$("#txtDOB").removeAttr("readonly");*/
+                //$("#txtAddress").removeAttr("readonly");
+               /* $("#txtRoleType").removeAttr("readonly");*/
+                $("#txtCompanyName").removeAttr("readonly");
+                $("#txtEmployeeCode").attr("readonly", true);
+            }
+            else {
+                $("#txtEmployeeName").attr("readonly", true);
+                $("#txtDepartment").attr("readonly", true);
+                $("#txtDepartment").show();
+                $("#DDLUNIT").hide();
+              /*$("#ddlRefferbyVehicleOther").hide();*/
+                $("#DDLDEPARTMENT").hide();
+                $("#CompanyName").hide();
+                $("#txtEmail").attr("readonly", true);
+                //$("#txtMobile").attr("readonly", true);
+                /*$("#txtDOB").attr("readonly", true);*/
+                /*$("#txtAddress").attr("readonly", true);*/
+                /*$("#txtRoleType").attr("readonly", true);*/
+                $("#txtCompanyName").attr("readonly", true);
+                $("#txtEmployeeCode").removeAttr("readonly");
+        }
+        if (@Html.Raw(Json.Encode(Model.SuggestedBy))== "Other") {
+            $('.SDetails').show();
+        }
+        if (@Html.Raw(Json.Encode(Model.PatientStatus))== "Close") {
+
+            $('.patientstatus').show();
+        }
+    });
+    function OpenTextBox()
+    {
+        if ($('#ddlSuggestedBy').val() == "Other")
+        {
+        $('.SDetails').show();
+         }
+        else
+        {
+            $('.SDetails').hide();
+        }
+    }
+ function PatientStatusDetails()
+  {
+      var status = $('#ddlpatientStatus').val();
+      if ($('#ddlpatientStatus').val() == "Close") {
+          $('.patientstatus').show();
+      }
+      else {
+          $('.patientstatus').hide();
+      }
+                                            }
+                                            function ReferByVehicleDetails() {
+                                                debugger;
+                                                var status = $('#ddlRefferbyVehicle').val();
+                                                if ($('#ddlRefferbyVehicle').val() == "Other") {
+                                                    $('.referbyothervehicle').show();
+                                                }
+                                                else {
+                                                    $('.referbyothervehicle').hide();
+                                                }
+                                            }
+
+
+                                            $(".btnSave").click(function () {
+                                               
+                                                if ($("#chkOutsideworker").prop('checked') == false) {
+                                                    if ($("#txtEmployeeCode").val() == null || $("#txtEmployeeCode").val() == "") {
+                                                        $(".empcodevalidate").text('Please Enter The EmployeeCode');
+                                                        return false;
+                                                    }
+                                                    if ($("#txtDOB").val() == null || $("#txtDOB").val() == "") {
+                                                        debugger;
+                                                        $('.txtempagecount').css({ 'color': 'red', });
+                                                        $(".txtempagecount").text('');
+                                                        $(".txtempagecount").text('Please Enter DOB');
+                                                        return false;
+                                                    }
+                                                }
+                                                else {
+
+                                                }
+
+
+
+        if ($("#chkfirstAidCheckup").prop('checked') == true)
+        {
+            if ($("#txtTreatment").val() == null || $("#txtTreatment").val() == "") {
+                $(".txtTreatmentvalidate").text('Please Enter Treatment');
+                return false;
+            }
+        }
+        if ($("#chkReffered").prop('checked') == true && $("#chkOutsideworker").prop('checked') == false)
+        {
+            if ($('#txtHospitalName').val() == null || $('#txtHospitalName').val() == "") {
+                $(".txtHospitalNametvalidate").text('Please Enter  Hospital Name');
+                return false;
+            }
+            else if ($('#txtAttendeeName').val() == null || $('#txtAttendeeName').val() == "") {
+                $(".txtAttendeeNameNametvalidate").text('Please Enter  Attendee Name');
+                return false;
+            }
+            else if ($('#txtAttendeeMobileNumber').val() == null || $('#txtAttendeeMobileNumber').val() == "")
+            {
+                $(".txtAttendeeMobilevalidate").text('Please Enter  Attendee Mobile');
+                return false;
+            }
+            if ($("#chkOutsideworker").prop('checked') == false)
+            {
+                GetDevelopmentSheetReport();
+            }
+            CreateDrpforrefferbyother();
+                                                }
+                                                esle
+                                                {
+                                                    if ($('#txtHospitalName').val() == null || $('#txtHospitalName').val() == "") {
+                                                        $(".txtHospitalNametvalidate").text('Please Enter  Hospital Name');
+                                                        return false;
+                                                    }
+                                                    else if ($('#txtAttendeeNameIfOutSide').val() == null || $('#txtAttendeeNameIfOutSide').val() == "") {
+                                                        $(".txtAttendeeNameIfOutSidevalidate").text('Please Enter  Attendee Name');
+                                                        return false;
+                                                    }
+                                                    else if ($('#txtAttendeeMobileNumber').val() == null || $('#txtAttendeeMobileNumber').val() == "") {
+                                                        $(".txtAttendeeMobilevalidate").text('Please Enter  Attendee Mobile');
+                                                        return false;
+                                                    }
+                                                }
+        if ($('#ddlSuggestedBy').val() == "Other")
+        {
+            if ($('#txtSuggestedDetails').val() == null || $('#txtSuggestedDetails').val() == "")
+            {
+                $(".SuggestedDetailsvalidate").text('Please Enter Details.');
+                return false;
+            }
+        }
+        if ($('#ddlpatientStatus').val() == "Close") {
+            if ($('#txtPatientStatusDiscription').val() == null || $('#txtPatientStatusDiscription').val() == "") {
+                $(".txtPatientStatusDiscriptionvalidate").text('Please Enter Details.');
+                return false;
+            }
+            else {
+                $(".txtPatientStatusDiscriptionvalidate").text('');
+
+            }
+            if ($('#ddlpatientfitnesscertificate').val() == '0') {
+                $(".txtpatientfitnesscertificatevalidate").text('Please Select.');
+                return false;
+            }
+            else {
+                $(".txtpatientfitnesscertificatevalidate").text('');
+            }
+        }
+                                                if ($("#txtReferbyOtherVehicle").val() == null || $("#txtReferbyOtherVehicle").val() == '') {
+                                                    $('.txtReferbyOtherVehiclevalidate').text('Please enter Vehicle Name.');
+                                                    return false;
+                                                }
+
+    })
+                                        </script>
+                                        <script type="text/javascript">
+                                            function GetDevelopmentSheetReport() {
+                                                $("#partialDivds").empty();
+                                                var html = '';
+                                                html += '<div>';
+                                                html += "<table class='table table-bordered scrolldown'>";
+                                                html += "<thead>";
+                                                html += "<tr>";
+                                                html += "<th colspan='2' style='border:1px solid black;height:50; width:50;'><img src='http://localhost:63850/assets/images/karam.png'/></th>";
+                                                html += "<th colspan='6' style='border:1px solid black;'><h3 style='text-align:center'><span><b>Medical Treatment Slip</b></span> <br/> <span><b>PN International Pvt Ltd.</b></span> <br/></h3> </th>";
+                                                //html += '<th colspan="1" style="border:1px solid black;"><h3 style="text-align:center"><span><b>@Html.Raw(Json.Encode(Model.HospitalName))</b></span><br/></h3> </th>';
+                                                html += '<th colspan="2" style="border:1px solid black;"><h3 style="text-align:center"><span><b>'+$("#txtHospitalName").val()+'</b></span><br/></h3> </th>';
+
+                                                html += '<th colspan="2" style="border:1px solid black;">';
+                                                html += "<table class='table table-bordered scrolldown'>";
+                                                html += "<thead>";
+                                                html += "<tr>"
+                                                html += "<th style='border: 1px solid black;'>Doc.No</th>"
+                                                html += "<td style='border: 1px solid black;'></td>"
+                                                html += "</tr>"
+                                                html += "<tr>"
+                                                html += "<th style='border: 1px solid black;'>Issue Dt.</th>"
+                                                html += "<td style='border: 1px solid black;'></td>"
+                                                html += "</tr>"
+                                                html += "<tr>"
+                                                html += "<th style='border: 1px solid black;'>Rev. & Dt.</th>"
+                                                html += "<td style='border: 1px solid black;'></td>"
+                                                html += "</tr>"
+                                                html += "</thead>";
+                                                html += "</table>";
+                                                html +='</th >';
+                                                html += "</tr>";
+                                                html += "</thead>";
+                                                html += "<tbody>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Employee Name</b></td>";
+                                                @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.EmployeeName))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">'+$("#txtEmployeeName").val()+'</td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Department</b></td>";
+                                                @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.Department))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">'+$("#txtDepartment").val()+'</td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Employee Code</b></td>";
+                                              @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.EmployeeCode))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">' + $("#txtEmployeeCode").val() + '</td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>First Aider Namee</b></td>";
+                                                @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.AttendeeName))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">' + $("#txtAttendeeName").val() + '</td>'
+                                                html += "</tr>";
+                                                //html += "<tr>";
+                                                //html += "<td colspan='2' style='border:1px solid black;'><b>Unit</b></td>";
+                                                //html += '<td colspan="10" style="border: 1px solid black;">' + $("#ddlUnit").val() + '</td>'
+                                                //html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Treatment Required</b></td>";
+                                                @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.Treatment))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">' + $("#txtTreatment").val() + '</td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Starting Date Of Treatment</b></td>";
+                                                @*html += '<td colspan="3" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.Date))</td>'*@
+                                                html += '<td colspan="2" style="border: 1px solid black;">' + $("#txtdate").val() + '</td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="2" style="border: 1px solid black;"></td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+                                                html += "<td colspan='2' style='border:1px solid black;'><b>Send By</b></td>";
+                                                @*html += '<td colspan="10" style="border: 1px solid black;">@Html.Raw(Json.Encode(Model.RefferbyVehicle))</td>'*@
+                                                html += '<td colspan="10" style="border: 1px solid black;">' + $("#ddlRefferbyVehicle").val() + '</td>'
+                                                html += "</tr>";
+                                                html += "<tr>";
+
+
+
+                                                html += '<td colspan="12" style="border:1px solid black;"><h3 style="text-align:center"><span><b>Treatment Expenses</b></span></h3></td>';
+                                                html += '<table>'
+                                                html += '<thead>'
+                                                html += '<tr>'
+                                                html += '<th colspan="3" style="border: 1px solid black;">Date</th>'
+                                                html += '<th colspan="3" style="border: 1px solid black;">Treatment Done By Doctor</th>'
+                                                html += '<th colspan="3" style="border: 1px solid black;">Amount</th>'
+                                                html += '<th colspan="3" style="border: 1px solid black;">Hospital Representaive Signature</th>'
+                                                html += '</tr>'
+                                                html += '</thead>'
+                                                html += '<tbody>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td  colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="3" style="border:1px solid black; height:50px;">Signature Safety Department</td>'
+                                                html += '<td colspan="9" style="border: 1px solid black;height:50px;text-align:center">Hospital Address:KBC-27,Sector-B,Opp. Phonix Mall,<br/>Kanpur Road,AlamBagh Lucknow-226010</td>'
+                                                html += '</tr>'
+                                                html +='</tbody>'
+                                                html += '</table>'
+                                                html += '<table>'
+                                                html += '<tbody>'
+                                                html += '</tbody>'
+                                                html += '<tr>'
+                                                html += '<td colspan="12" style="border:1px solid black;"><h3 style="text-align:center"><span><b>Contact Detail</b></span></h3></td>';
+                                                html += '</tr>'
+                                                html += '<tr>'
+                                                html += '<td colspan="4" style="border:1px solid black; height:50px;">SKD Hospital <br/> +91 8388526262 <br/> 0522-4044111/4021010</td>'
+                                                html += '<td colspan="4" style="border:1px solid black; height:50px;">Occupational Health Center <br/> 9653038762</td>'
+                                                html += '<td colspan="4" style="border:1px solid black; height:50px;">Safety Officer <br/> 9076843512,8009785601, 9695001116, <br/> 9559996662</td>'
+                                                html += '</tr>'
+                                                html += '</table>'
+                                                html += "</tr>";
+                                                html += "</tbody>";
+                                                html += "</table>";
+                                                 html += '</div>';
+                                                $("#partialDivds").append(html);
+                                                /*PdfGenerate();*/
+                                                var contents = $("#partialDivds").html();
+                                                var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+                                                /*var result = 'data:application/pdf,' + encodeURIComponent(html);*/
+                                                var link = document.createElement("a");
+                                                document.body.appendChild(link);
+                                                link.download = "MedicalTreatmentSlip-"+$("#txtHospitalName").val()+".xls"; //You need to change file_name here.
+                                                link.href = result;
+                                                link.click();
+                                            }
+                                        </script>
+                                        <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+                                        <script type="text/javascript">
+                                            var doc = new jsPDF();
+                                            var specialElementHandlers = {
+                                                '#editor': function (element, renderer) {
+                                                    return true;
+                                                }
+                                            };
+
+                                            function PdfGenerate() {
+                                                debugger;
+                                                var doc = new jsPDF();
+                                                doc.fromHTML($('#partialDivds').html(), 15, 15, {
+                                                    'width': 170,
+                                                    'elementHandlers': specialElementHandlers
+                                                });
+                                                doc.save('sample-file.pdf');
+                                            };
+                                        </script>
+                                        <script>
+                                            function ValidateDOB() {
+
+                                                var dateString = $('#txtDOB').val();
+                                                dob = new Date(dateString);
+                                                var today = new Date();
+                                                var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+                                                $('.txtempagecount').css({ 'color': 'green', });
+                                                $('.txtempagecount').html(age + ' years old');
+                                                //if (age===NaN )
+                                                //{
+                                                //    debugger;
+                                                //    $('.txtempagecount').html(0 + ' years old');
+
+                                                //}
+                                                //else
+                                                //{
+                                                //    debugger;
+                                                //    $('.txtempagecount').html(age + ' years old');
+                                                //}
+
+                                            }
+                                            function CreateDrpforrefferbyother() {
+                                                debugger;
+                                                $('#ddlRefferbyVehicle').find('option')
+                                                    .remove()
+                                                    .end()
+                                                    .append("<option value=" + 'Bike' + ">" + 'Bike' + "</option><option value=" + 'Ambulance' + ">" + 'Ambulance' + "</option><option value=" + 'Other' + ">" + 'Other' + "</option>");
+                                                //#ddlRefferbyVehicle('option')
+                                                //       .remove()
+                                                //       .end()
+                                                //       .append('<option value="whatever">text</option>')
+                                                //   $('#ddlRefferbyVehicle').append("<option value=" + 'Bike' + ">" + 'Bike' + "</option><option value=" + 'Ambulance' + ">" + 'Ambulance' + "</option><option value=" + 'Other' + ">" + 'Other' + "</option>");
+                                            }
+                                        </script>

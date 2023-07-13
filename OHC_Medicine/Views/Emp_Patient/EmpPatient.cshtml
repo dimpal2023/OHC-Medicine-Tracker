@@ -1,0 +1,285 @@
+﻿@model OHCModel.Model.Emp_PatientModel
+@*@if (Model != null)
+    {*@
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Employee Cum Patient</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Employee Cum Patient</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> Employee Cum Patient </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Employee Cum Patient</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.EmployeeCode, new { @id = "txtEmployeeCode", @Placeholder = "Search Employee Code", @class = "form-control"})
+                                        @*@Html.ValidationMessageFor(m => m.EmployeeCode, "", new { @class = "m-form__help empcodevalidate" })*@
+                                        <span class="m-form__help empcodevalidate"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label for="EmployeeName">Is Outside Worker</label>
+                                        @Html.CheckBoxFor(m => m.IsOutsideWorker, new { @id = "chkOutsideworker" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary mr-2" onclick="GetData()"> Search </button>
+                                    </div>
+                                </div>*@
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.EmployeeId)
+                                    <label class="required" for="EmployeeName">Employee Name</label>
+                                    @Html.TextBoxFor(m => m.EmployeeName, new { @id = "txtUserName", @Placeholder = "Employee Name", @class = "form-control", @required = "required", @readonly = true })
+
+                                    @Html.ValidationMessageFor(m => m.EmployeeName, "", new { @class = "m-form__help" })
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="Dob">Dob</label>
+                                    @Html.TextBoxFor(m => m.Dob, new { @id = "txtDob", @type = "date", @Placeholder = "Dob", @class = "form-control", @required = "required", @onchange = "return ValidateDOB();" })
+                                    <span id="lblError" class="errormsg" style="color:Red"></span>
+                                    @Html.ValidationMessageFor(m => m.Dob, "", new { @class = "m-form__help", @id = "txtvalDob" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="EmployeeType">Employee Type</label>
+
+                                    @Html.DropDownListFor(model => model.EmployeeType, new List<SelectListItem>
+                               {
+                                   new SelectListItem {Text = "Contract", Value = "Contract", Selected = true },
+                                   new SelectListItem {Text = "OnRoll", Value = "OnRoll" }
+                               }, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="Address">Address</label>
+                                    @Html.TextBoxFor(m => m.Address, new { @id = "Address", @Placeholder = "Address", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="Status">Status</label>
+                                    @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>
+                              {
+                                  new SelectListItem {Text = "Active", Value = "1", Selected = true },
+                                  new SelectListItem {Text = "Inactive", Value = "2" }
+                              }, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        @if (Model.EmployeeId == 0)
+                        {
+                            <button type="submit" class="btn btn-primary mr-2 btnSubmit"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                        }
+
+                        <button class="btn btn-light" type="button" onclick="location.href='@Url.Action("List", "Emp_Patient")'">Cancel</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/assets/css/jquery.ui.css" rel="stylesheet" />
+<script src="~/assets/js/jquery-ui.js"></script>
+<script type="text/javascript">
+
+    //function GetData() {
+    //    $.ajax({
+    //        url: "/UserMaster/FindEmployee_Data",
+    //        datatype: "json",
+    //        data: {
+    //            Type: 1,
+    //            query: $('#EmployeeCode').val()
+    //        },
+    //        success: function (data) {
+    //            debugger
+
+    //            if (data[0] == undefined) {
+    //                toastr.error('Data not found.');
+    //                $("#txtDob").val('');
+    //                $("#EmployeeName").val('');
+    //                $("#Address").val('');
+    //                $("#EmployeeType").val('');
+    //            } else {
+
+    //                $("#txtDob").val(new Date());
+    //                $("#EmployeeName").val(data[0].Name);
+    //                $("#Address").val(data[0].Address);
+    //                $("#EmployeeType").val(data[0].EmpType).select2();
+    //            }
+
+    //        }
+    //    })
+    //}
+
+    $("#txtEmployeeCode").autocomplete({
+
+        max: 10,
+        minLength: 1,
+        source: function (request, response) {
+            $.ajax({
+                url: "/Utility/FindEmployee_Data",
+                datatype: "json",
+                data: {
+                    Type: 1,
+                    query: $('#txtEmployeeCode').val()
+                },
+                success: function (data) {
+                    if (!data.length) {
+                        var result = [{ label: "no results", value: response.term }];
+                        response(result);
+                    }
+                    else {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Name + ' - ' + val.Empid,
+                                value: val.Empid,
+                                empname: val.Name,
+                                empemail: val.EMAIL,
+                                EmpType: val.EmpType
+                            }
+                        }))
+                    }
+                }
+            })
+        },
+        select: function (event, ui) {
+            $("#txtUserName").val(ui.item.empname);
+            $("#txtEmail").val(ui.item.empemail);
+            $("#EmployeeType").val(ui.item.EmpType).select2();
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+    function ValidateDOB() {
+        var dateString = $('#txtDob').val();
+        var new_val = dateString.split('-'),
+            year = parseInt(new_val[0]),
+            month = parseInt(new_val[1]),
+            day = parseInt(new_val[2]);
+        var age = 18;
+        var setDate = new Date(year + age, month - 1, day);
+        var currdate = new Date();
+        if (currdate >= setDate) {
+        }
+        else {
+            $('#txtDob').val('');
+            $('#txtvalDob').text("Eligibility 18 years ONLY.");
+        }
+        return true;
+    }
+    function GetTodayDate() {
+        var tdate = new Date();
+        var dd = tdate.getDate(); //yields day
+        var MM = tdate.getMonth(); //yields month
+        var yyyy = tdate.getFullYear(); //yields year
+        var currentDate = dd + "/" + (MM + 1) + "/" + yyyy;
+        return currentDate;
+    }
+    //Enabel/disable username textbox on outside worker checkbox
+    $(function () {
+        enable_cb();
+        $("#chkOutsideworker").click(enable_cb);
+    });
+    function enable_cb() {
+        debugger;
+        if (this.checked) {
+            $("#txtUserName").removeAttr("readonly");
+            $("#txtEmployeeCode").attr("readonly", true);
+        } else {
+            $("#txtUserName").attr("readonly", true);
+            $("#txtEmployeeCode").removeAttr("readonly");
+        }
+        $(".btnSubmit").click(function () {
+            var chkval = $("#chkOutsideworker").val();
+            if (chkval == "false") {
+                $(".empcodevalidate").text('Please Enter The EmployeeCode');
+                return true
+            }
+        })
+
+    }
+    $(document).ready(function () {
+            debugger;
+            if (@Html.Raw(Json.Encode(Model.IsOutsideWorker)) == true) {
+                $("#txtUserName").removeAttr("readonly");
+                $("#txtEmployeeCode").attr("readonly", true);
+            }
+            else {
+                $("#txtUserName").attr("readonly", true);
+                $("#txtEmployeeCode").removeAttr("readonly");
+            }
+        });
+</script>

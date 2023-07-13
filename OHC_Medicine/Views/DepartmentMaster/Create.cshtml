@@ -1,0 +1,10 @@
+﻿@using OHCModel.Model
+@model DepartmentMasterModel
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Create", "DepartmentMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("Department");
+}

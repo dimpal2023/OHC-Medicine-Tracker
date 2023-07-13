@@ -1,0 +1,240 @@
+﻿@*@model OHCModel.Model.DepartmentMasterModel*@
+@model OHCModel.Model.UserMasterModel
+
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column {
+        flex: 33%;
+        padding: 2px;
+        /*height: 300px;*/ /* Should be removed. Only for demonstration */
+    }
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+</style>
+
+
+
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">User</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> User </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">User</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        @*<label class="required" for="DepartmentName">Employee Code</label>*@
+                                        @Html.TextBoxFor(m => m.EmployeeCode, new { @id = "txtEmployeeCode", @Placeholder = "Search Employee Code", @class = "form-control", @required = "required" })
+                                        @Html.ValidationMessageFor(m => m.EmployeeCode, "", new { @class = "m-form__help" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary mr-2" onclick="test()"> Search </button>
+                                    </div>
+                                </div>*@
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="UserName">Employee Name</label>
+                                    @Html.TextBoxFor(m => m.UserName, new { @id = "txtUserName", @Placeholder = "Employee Name", @class = "form-control", @required = "required", @readonly = true })
+                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "m-form__help" })
+                                    @Html.HiddenFor(m => m.UserId)
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+
+                                    <label class="required" for="Email">Email</label>
+                                    @Html.TextBoxFor(m => m.Email, new { @id = "txtEmail", @Placeholder = "Email", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="Password">Password</label>
+                                    @Html.TextBoxFor(m => m.Password, new { @id = "Password", @Placeholder = "Password", @type = "Password", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="EmpType">Role</label>
+                                    @*Unit*@
+                                    @Html.DropDownListFor(m => m.EmpType, Model._EmpTypeList, new { @id = "ddlEmpType", @class = "form-control m-input" })
+
+                                    @Html.ValidationMessageFor(m => m.EmpType, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="Unit">Unit</label>
+                                    @*Unit*@
+                                    @Html.DropDownListFor(m => m.Unit, Model._UnitList, new { @id = "ddlUnit", @class = "form-control m-input" })
+
+                                    @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentId">Department</label>
+                                    @*Department*@
+                                    @Html.DropDownListFor(m => m.DepartmentId, Model._DepartmentList, new { @id = "DDLDepartmentName", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.DepartmentId, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="DepartmentName">Type</label>
+
+                                        @Html.DropDownListFor(m => m.DepartmentId, Model._DepartmentList, new { @id = "Department", @class = "form-control m-input" })
+
+                                    </div>
+                                </div>*@
+                            <div class="col-sm-3">
+
+                                <div class="form-group">
+                                    <label for="Status">Status</label>
+                                    @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>
+                              {
+                                  new SelectListItem {Text = "Active", Value = "1", Selected = true },
+                                  new SelectListItem {Text = "Inactive", Value = "2" }
+                              }, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+
+
+
+                        @if (Model.UserId == 0)
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                        }
+                        <button class="btn btn-light" type="button" onclick="location.href='@Url.Action("List", "UserMaster")'">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*}*@
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/OHCFunction.js"></script>
+<link href="~/assets/css/jquery.ui.css" rel="stylesheet" />
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+
+    //function test() {
+    //    $.ajax({
+    //        url: "/UserMaster/FindEmployee_Data",
+    //        datatype: "json",
+    //        data: {
+    //            Type: 1,
+    //            query: $('#EmployeeCode').val()
+    //        },
+    //        success: function (data) {
+    //            if (data[0] == undefined) {
+    //                toastr.error('Data not found.');
+    //                $("#Email").val('');
+    //                $("#UserName").val('');
+    //            } else {
+    //                $("#Email").val(data[0].EMAIL);
+    //                $("#UserName").val(data[0].Name);
+    //            }
+
+    //        }
+    //    })
+    //}
+
+    $("#txtEmployeeCode").autocomplete({
+
+        max: 10,
+        minLength: 1,
+        source: function (request, response) {
+            debugger;
+            $.ajax({
+                url: "/Utility/FindEmployee_Data",
+                datatype: "json",
+                data: {
+                    Type: 1,
+                    query: $('#txtEmployeeCode').val()
+                },
+                success: function (data) {
+                    debugger;
+                    if (!data.length) {
+                        var result = [{ label: "no results", value: response.term }];
+                        response(result);
+                    }
+                    else {
+                        response($.map(data, function (val, item) {
+                            debugger;
+                            return {
+                                label: val.Name + ' - ' + val.Empid,
+                                value: val.Empid,
+                                empname: val.Name,
+                                empemail: val.EMAIL
+                            }
+                        }))
+                    }
+                }
+            })
+        },
+        select: function (event, ui) {
+            $("#txtUserName").val(ui.item.empname);
+            $("#txtEmail").val(ui.item.empemail);
+
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+</script>
+
+
+
+

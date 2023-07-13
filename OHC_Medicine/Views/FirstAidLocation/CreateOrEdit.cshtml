@@ -1,0 +1,158 @@
+﻿@model OHCModel.Model.FALModel
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">First Aid Location</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> First Aid Location </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">First Aid Location</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="Status">Unit</label>
+                                    @Html.DropDownListFor(m => m.Unit, Model._UnitList, new { @id = "ddlUnit", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "m-form__help" })
+                                </div>
+
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Department Name</label>
+                                    @Html.DropDownListFor(m => m.DepartmentName, Model._DepartmentList, new { @id = "DDLDepartmentName", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "m-form__help" })
+                                    @Html.HiddenFor(m => m.Id)
+                                </div>
+
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Location</label>
+                                    @Html.TextBoxFor(m => m.LocationName, new { @id = "LocationName", @Placeholder = "Location Name", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.LocationName, "", new { @class = "m-form__help" })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label for="Status">Status</label>
+                                    @Html.DropDownListFor(m => m.Status, Model._StatusList, new { @id = "ddltStatus", @class = "form-control m-input" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Status, "", new { @class = "m-form__help" })
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label for="Status">Station Manager</label>
+                                        @Html.HiddenFor(m => m.EmployeeCode,new { @id = "txtEmployeeCode", @Placeholder = "Search Employee Code", @class = "form-control", @required = "required" })
+                                        @Html.TextBoxFor(m => m.HdnEmployeeCode, new { @id = "txthdnEmployeeCode", @Placeholder = "Search Employee Code", @class = "form-control", @required = "required" })
+                                        @Html.ValidationMessageFor(m => m.HdnEmployeeCode, "", new { @class = "m-form__help" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="form-group">
+                                    <label for="Status">Station Number</label>
+                                    @Html.TextBoxFor(m => m.StationNumber, new { @id = "txtStationNumber", @Placeholder = "Station Number", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.StationNumber, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.Id == 0)
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                        }
+                        <a type="button" class="btn btn-light" href="/FirstAidLocation/List">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link href="~/assets/css/jquery.ui.css" rel="stylesheet" />
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+    $("#txthdnEmployeeCode").autocomplete({
+
+        max: 10,
+        minLength: 1,
+        source: function (request, response) {
+            debugger;
+            $.ajax({
+                url: "/Utility/FindEmployee_Data",
+                datatype: "json",
+                data: {
+                    Type: 1,
+                    query: $('#txthdnEmployeeCode').val()
+                },
+                success: function (data) {
+                    if (!data.length) {
+                        var result = [{ label: "no results", value: response.term }];
+                        response(result);
+                    }
+                    else {
+                        response($.map(data, function (val, item) {
+                            return {
+                                label: val.Name + ' - ' + val.Empid,
+                                value: val.Name + ' - ' + val.Empid,
+                                Text: val.Empid
+                            };
+                        }))
+                    }
+                }
+            })
+        },
+        select: function (event, ui) {
+            debugger;
+            $('#txtEmployeeCode').val(ui.item.Text)
+            //$("#txtUserName").val(ui.item.empname);
+            //$("#txtEmail").val(ui.item.empemail);
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+</script>

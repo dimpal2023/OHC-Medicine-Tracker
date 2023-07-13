@@ -1,0 +1,71 @@
+﻿@model OHCModel.Model.MedicineMasterModel
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+</style>
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">Medicine</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Master</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Medicine </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Medicine</h4>
+                        <p class="card-description">&nbsp;</p>
+                        <form class="forms-sample">
+                            <div class="row">
+                                <div class="column">
+                                    <div class="form-group">
+                                        <label class="required" for="MedicineName">Medicine Name</label>
+                                        @Html.TextBoxFor(m => m.MedicineName, new { @id = "Medicine Name", @Placeholder = "Medicine Name", @class = "form-control", @required = "required" })
+                                        @Html.ValidationMessageFor(m => m.MedicineName, "", new { @class = "m-form__help" })
+                                        @Html.HiddenFor(m => m.Id)
+                                    </div>
+
+                                </div>
+                                <div class="column">
+                                    <div class="form-group">
+                                        <label for="Status">Status</label>
+                                        @Html.DropDownListFor(m => m.Status, Model._StatusList, new { @id = "ddltStatus", @class = "form-control m-input" })
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="form-group">
+                                        <label for="Status">Remark</label>
+                                        @Html.TextBoxFor(m => m.Remark, new { @id = "txtRemark", @class = "form-control m-input", @Placeholder = "Enter your remarks" })
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.Id == 0)
+                            { 
+                                <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                            }
+                        <a class="btn btn-light" href="/MedicineMaster/List">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@*}*@

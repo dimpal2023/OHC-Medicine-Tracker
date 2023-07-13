@@ -1,0 +1,61 @@
+﻿@using OHCModel.Model
+@model MedicineReceivingFormModel
+@{
+    ViewBag.Title = "Medicine Receiving Form";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Medicine Receiving Form List</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "MedicineReceivingForm")" type="button" class="btn btn-sm ml-3 btn-success"> Add New Receiving Form </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine Receiving Form List</h4>
+                    @*<div class="table-responsive">*@
+                        <table class="table table-hover table-responsive" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+                                    <th>Medicine Name</th>
+                                    <th>Vendor Name</th>
+                                    <th>HSN Number</th>
+                                    <th>Pack</th>
+                                    <th>Quantity</th>
+                                    <th>Batch Number</th>
+                                    <th>Rate</th>
+                                    <th>Expiry Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model._MedicineReceivingFormModelList)
+                                {
+                                    <tr>
+                                        <td class="py-1">@(++i)</td>
+                                        <td>@data.Medicinename</td>
+                                        <td>@data.VenderName</td>
+                                        <td>@data.HSNNumber</td>
+                                        <td>@data.Pack</td>
+                                        <td>@data.Quantity</td>
+                                        <td>@data.BatchNumber</td>
+                                        <td>@data.Rate</td>
+                                        <td>@data.ExpiryDate</td>
+                                        <td class="textcenter">
+                                            <a href="@Url.Action("Edit", "MedicineReceivingForm", new { ID = @data.id })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

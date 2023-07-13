@@ -1,0 +1,7 @@
+﻿@using OHCModel.Model
+@model FAVModel
+
+@using (Html.BeginForm("Edit", "FirstAidVolunteer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("CreateOrEdit");
+}

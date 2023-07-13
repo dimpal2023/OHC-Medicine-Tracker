@@ -1,0 +1,270 @@
+﻿@model OHCModel.Model.MedicineRequisitionFromModel
+<style>
+    /*.form-control {
+        display: block;
+        width: 47%;
+    }*/
+    .table thead th {
+        border-top: 0;
+        border-bottom-width: 1px;
+        font-family: "Rubik", sans-serif;
+        font-weight: 500;
+        padding-left: 100px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        font-size: 0.875rem;
+        line-height: 1;
+        white-space: nowrap;
+        padding: 4px 0px 5px 25px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+    .table thead {
+        background-color: #cfdaed;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Medicine Requisition Form</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Medicine Requisition Form</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine Requisition Form</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Unit</label>
+                                    @Html.DropDownListFor(m => m.Unit, Model._UnitList, new { @id = "ddlUnit", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Department Name</label>
+                                    @Html.DropDownListFor(m => m.DepartmentName, Model._DepartmentList, new { @id = "DDLDepartmentName", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "m-form__help" })
+                                    @Html.HiddenFor(m => m.MedicineRequisitionID)
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered" id="tblParticipantList">
+                            <thead>
+                                <tr style="height: 35px;">
+                                    <th style="width:33%;" class="required">Medicine</th>
+                                    <th class="required">QTY</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model._DetailsofMedicineRequisitionList != null)
+                                {
+                                    for (int i = 0; i < Model._DetailsofMedicineRequisitionList.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <select id="DDLMedicine" class="req1 form-control m-input" name="DDLMedicine" onchange='GetCust(this)' ; style="width:89%;">
+                                                        @foreach (SelectListItem option in Model._MedicineList)
+                                                        {
+                                                            <option value="@option.Value" @(option.Value == Model._DetailsofMedicineRequisitionList[i].Medicinename ? "selected='selected'" : "")>@option.Text</option>
+                                                        }
+                                                    </select>
+                                                    @Html.HiddenFor(m => m._DetailsofMedicineRequisitionList[i].Medicinename, new { @class = "HdnPlan2" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @Html.TextBoxFor(m => m._DetailsofMedicineRequisitionList[i].Qty, new { @Class = "req2 form-control m-input", @style = "width:89%;", @onkeypress = "return isNumberKey(event,this)" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @Html.TextBoxFor(m => m._DetailsofMedicineRequisitionList[i].Remark, new { @Class = "req3 form-control m-input", @style = "width:89%;" })
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="btn btn-danger" id="delete" onclick='Remove(this)'>Remove</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <select id="ddlMedicine" style="width:89%;" class="form-control m-input">
+                                            @foreach (SelectListItem option1 in Model._MedicineList)
+                                            {
+                                                <option value="@option1.Value">@option1.Text</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtQuantity" class="form-control m-input" style="width:89%;" onkeypress='return isNumberKey(event,this)' />
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txtRemark" class="form-control m-input" style="width:89%;" />
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="btn btn-primary" id="addnewrow" title="Add"><span class="mdi mdi-plus"></span></a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <br />
+                        @if (Model.MedicineRequisitionID == 0)
+                        {
+                            <button type="submit" id="btnSave" class="btn btn-primary mr-2 btnSave"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2 btnSave"> Update </button>
+                        }
+                        <a class="btn btn-light" href="/MedicineRequisitionFrom/List">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    
+    $("#addnewrow").on("click", function () {
+        debugger;
+        //Reference the Name and Country TextBoxes.
+        var txtMedicine = $("#ddlMedicine option:selected");
+        var txtQuantity = $("#txtQuantity");
+        var txtRemark = $("#txtRemark");
+        var rowcount = $("#tblParticipantList > tbody > tr").length;
+        var name1 = "_DetailsofMedicineRequisitionList[" + rowcount + "].Medicinename";
+        var name2 = "_DetailsofMedicineRequisitionList[" + rowcount + "].Qty";
+        var name3 = "_DetailsofMedicineRequisitionList[" + rowcount + "].Remark";
+        var MedicineHtml = "";
+        $('#ddlMedicine option').each(function () {
+            if ($("#ddlMedicine option:selected").val() == $(this).val()) {
+                MedicineHtml += "<option value=" + $(this).val() + " name=" + name1 + " selected>" + $(this).text() + "</option>";
+            } else {
+                MedicineHtml += "<option value=" + $(this).val() + " name=" + name1 + ">" + $(this).text() + "</option>";
+            }
+        });
+        var textbox = $("<tr><td><select class='form-control m-input req1' style=width:89%; onclick='return GetCust(this)'>" + MedicineHtml + "</select></td >"
+            + "<td style=display:none><input type='hidden' class='form-control m-input' value='" + txtMedicine.val() + "' name='" + name1 + "'></td >"
+            + "<td><input type='text' class='form-control m-input req2' style=width:89%; onkeypress='return isNumberKey(event,this)' value='" + txtQuantity.val() + "' name='" + name2 + "'></td >"
+            + "<td><input type='text' class='form-control m-input req3' style=width:89%; value='" + txtRemark.val() + "' name='" + name3 + "'></td >"
+            + "<td><input type='button' class='btn btn-danger' value='Remove' onclick='Remove(this);'></td >"
+            + "</tr > ");
+        $("#tblParticipantList tbody").append(textbox);
+        //Clear the TextBoxes.
+
+        $("#ddlMedicine").select2("val", 0);
+        $("#txtQuantity").val("");
+        $("#txtRemark").val("");
+    });
+    function GetCust(e) {
+        debugger;
+        var vdv = $(e).closest("tr").find("#DDLMedicine option:selected").val();
+        $(e).closest("tr").find(".HdnPlan2").attr('value', vdv);
+    }
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("tr");
+        var name = $("td", row).eq(0).html();
+        if (confirm("Do you want to delete selected row.")) {
+            //Get the reference of the Table.
+            var table = $("#tblParticipantList")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+    $(".btnSave").click(function () {
+        debugger;
+        var flag = false
+        var allmed = '';
+        $("#tblParticipantList tbody tr").each(function () {
+            debugger;
+            if ($(this).find('.req1').val() == "0") {
+                $(this).find('.req1').css("border", "1px solid red");
+                flag = true;
+            } else {
+                $(this).find('.req1').css("border", "1px solid lightgray");
+            }
+            if ($(this).find('.req2').val() == "" || null) {
+                $(this).find('.req2').css("border", "1px solid red");
+                flag = true;
+            } else {
+                $(this).find('.req2').css("border", "1px solid lightgray");
+            }
+            var valMedicine = $(this).find('select.req1  option:selected').val();
+            var txtMedicine = $(this).find('select.req1  option:selected').text();
+            allmed = allmed + valMedicine + ","
+            /*Duplicate Medicine validation */
+            if (txtMedicine == "--Select--") {
+                $(this).find('.req1').css('border-color', 'red');
+                toastr.warning('Please select medicine');
+                event.preventDefault();
+            }
+            var medcntbymed = allmed.split(valMedicine + ",").length - 1
+            var dd = countRepeatedWords(allmed);
+            if (dd == 2) {
+                if (medcntbymed >= 2) {
+                    $(this).find('.req1').css('border-color', 'red');
+                }
+                else {
+
+                    //$(this).find('.req1').css("border-color", "gray");
+                }
+            }
+            /*--------------------*/
+            var cc = countRepeatedWords(allmed);
+            if (cc == 2) {
+                toastr.warning('Duplicate medicine  not allowed.');
+                event.preventDefault();
+                return false;
+            }
+        })
+        if (flag) {
+            return false;
+        }
+    })
+    function countRepeatedWords(sentence) {
+        debugger;
+        let words = sentence.split(",");
+        let wordMap = {};
+        var cnt = 0;
+        for (let i = 0; i < words.length; i++) {
+            let currentWordCount = wordMap[words[i]];
+            let count = currentWordCount ? currentWordCount : 0;
+            wordMap[words[i]] = count + 1;
+            if (count > 0) {
+                cnt = 2;
+            }
+        }
+        return cnt;
+    }
+</script>

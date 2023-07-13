@@ -1,0 +1,127 @@
+﻿@using OHCModel.Model
+@model LoginModel
+@{
+    ViewBag.Title = "About";
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>EHS Medical</title>
+    <meta name="keywords" content="EHSMedical">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><!-- Favicon -->
+    <link rel="shortcut icon" href="~/CustomLogin/assets/img/favicon.ico"> @*Plugins CSS*@
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/icofont.min.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/simple-line-icons.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/jquery.typeahead.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/datatables.min.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/Chart.min.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/morris.css">
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/leaflet.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="~/CustomLogin/assets/css/style.css">
+    <style>
+        .m-form__help {
+            font-size: 100%;
+            display: inline-block;
+            color: red;
+        }
+        .loading-img-spin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin: -60px 0 20px -20px;
+            -webkit-animation: spin 1.5s linear infinite;
+            -moz-animation: spin 1.5s linear infinite;
+            animation: spin linear 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="public-layout">
+    <div class="app-loader main-loader">
+        <div class="loader-box">
+            <div class="page-loader-wrapper">
+                <div class="loader">
+                    <div class="m-t-30">
+                        <img class="loading-img-spin" src="../../assets/images/karam.png" alt="admin">
+                    </div>
+                    <p style="color:black;font-size:15px">Please wait...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- .main-loader -->
+    <div class="page-box">
+        <div class="app-container page-sign-in">
+            <div class="content-box">
+                <div class="content-header">
+                    <div class="app-logo">
+                        <div class="logo-wrap">
+                            <img src="../../assets/images/karam.png" alt="" width="147" height="33" class="logo-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="w-100">
+                        <h2 class="h4 mt-0 mb-1">Sign in</h2>
+                        <p class="text-muted">Sign in to access your Account</p>
+                        @using (Html.BeginForm("Index", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <form>
+                                <div class="form-group">
+
+                                    @Html.TextBoxFor(m => m.UserID, new { @id = "UserID", @Placeholder = "Login", @class = "form-control", @required = "required" })
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.Password, new { @id = "Password", @Placeholder = "Password", @type = "password", @class = "form-control", @required = "required" })
+
+                                </div>
+                                <div class="form-check form-switch mb-4">
+                                    <input type="checkbox" class="form-check-input" id="remember-me" checked="checked">
+                                    <label class="form-check-label" for="remember-me">Remember me</label>
+                                </div>
+                                <div class="actions justify-content-between">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-icon icofont-login me-2">
+                                        </span>Sign in
+                                    </button>
+                                </div>
+                                <spna class="m-form__help">@ViewBag.Message</spna>
+                            </form>
+                        }
+                        <p class="mt-5 mb-1">
+                            <a href="~/Account/UserEmail">Forgot password?</a>
+                        </p>
+                        @*<p>
+                            Don't have an account?
+                            <a href="./sign-up.html">Sign up!</a>
+                        </p>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/CustomLogin/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="~/CustomLogin/assets/js/jquery-migrate-1.4.1.min.js"></script>
+    <script src="~/CustomLogin/assets/js/popper.min.js"></script>
+    <script src="~/CustomLogin/assets/js/bootstrap.min.js"></script>
+    <script src="~/CustomLogin/assets/js/jquery.typeahead.min.js"></script>
+    <script src="~/CustomLogin/assets/js/datatables.min.js"></script>
+    <script src="~/CustomLogin/assets/js/bootstrap-select.min.js"></script>
+    <script src="~/CustomLogin/assets/js/jquery.barrating.min.js"></script>
+    <script src="~/CustomLogin/assets/js/Chart.min.js"></script>
+    <script src="~/CustomLogin/assets/js/raphael-min.js"></script>
+    <script src="~/CustomLogin/assets/js/morris.min.js"></script>
+    <script src="~/CustomLogin/assets/js/echarts.min.js"></script>
+    <script src="~/CustomLogin/assets/js/echarts-gl.min.js"></script>
+    <script src="~/CustomLogin/assets/js/main.js"></script>
+</body>
+</html>

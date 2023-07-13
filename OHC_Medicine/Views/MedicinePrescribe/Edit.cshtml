@@ -1,0 +1,10 @@
+﻿@using OHCModel.Model
+@model MedicinePrescribeModel
+@{
+    ViewBag.Title = "OPD Patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Edit", "MedicinePrescribe", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("CreateOrEdit");
+}

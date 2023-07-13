@@ -1,0 +1,6 @@
+﻿@using OHCModel.Model
+@model MedicineRequisitionFromModel
+@using (Html.BeginForm("Edit", "MedicineRequisitionFrom", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("CreateOrEdit");
+}

@@ -1,0 +1,7 @@
+﻿@using OHCModel.Model
+@model FALModel
+
+@using (Html.BeginForm("Edit", "FirstAidLocation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("CreateOrEdit");
+}

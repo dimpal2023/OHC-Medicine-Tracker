@@ -1,0 +1,458 @@
+﻿@using OHCModel.Model
+@model DashboardModel
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper pb-0">
+    <div class="page-header flex-wrap">
+        <h3 class="mb-0">
+            Hi, welcome back ! <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block"></span>
+        </h3>
+        @*<div class="d-flex">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border">
+                    <i class="mdi mdi-email btn-icon-prepend"></i> Email
+                </button>
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border ml-3">
+                    <i class="mdi mdi-printer btn-icon-prepend"></i> Print
+                </button>
+                <button type="button" class="btn btn-sm ml-3 btn-success"> Add User </button>
+            </div>*@
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 stretch-card grid-margin">
+
+            <div class="col-xl-3 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card bg-warning">
+                    <div class="card-body px-3 py-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="color-card">
+                                <p class="mb-0 color-card-head">Pending Request</p>
+                                <h2 class="text-white">
+                                    @Model.PendingRequset
+                                    @*<span class="h5">00</span>*@
+                                </h2>
+                            </div>
+                            <i class="card-icon-indicator mdi mdi-basket bg-inverse-icon-warning"></i>
+                        </div>
+                        @*<h6 class="text-white">18.33% Since last month</h6>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
+                <div class="card bg-danger">
+                    <div class="card-body px-3 py-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="color-card">
+                                <p class="mb-0 color-card-head">Current Stock</p>
+                                <h2 class="text-white">
+                                    @Model.CurrentStock@*<span class="h5">00</span>*@
+                                </h2>
+                            </div>
+                            <i class="card-icon-indicator mdi mdi-cube-outline bg-inverse-icon-danger"></i>
+                        </div>
+                        @*<h6 class="text-white">13.21% Since last month</h6>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3 pb-lg-0 pb-xl-3">
+                <div class="card bg-primary">
+                    <div class="card-body px-3 py-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="color-card">
+                                <p class="mb-0 color-card-head">Today Purchase</p>
+                                <h2 class="text-white">
+                                    @Model.TodayPurchase@*<span class="h5">00</span>*@
+                                </h2>
+                            </div>
+                            <i class="card-icon-indicator mdi mdi-briefcase-outline bg-inverse-icon-primary"></i>
+                        </div>
+                        @*<h6 class="text-white">67.98% Since last month</h6>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3 pb-lg-0 pb-xl-3">
+                <div class="card bg-success">
+                    <div class="card-body px-3 py-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="color-card">
+                                <p class="mb-0 color-card-head">Medicine Issuence</p>
+                                <h2 class="text-white">@Model.TotalIssue</h2>
+                            </div>
+                            <i class="card-icon-indicator mdi mdi-cube-outline bg-inverse-icon-success"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-12 stretch-card grid-margin">
+            <div class="card" style="background: #8ebbbb; ">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h5>Unit Wise OPD Details</h5>
+                        </div>
+                    </div>
+                    @if (Model.UserUnitID == 1)
+                    {
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Unit 1</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit1</h3>
+                                            </div>
+                                            <div id="earningChart" class="flot-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Unit 2</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit2</h3>
+                                            </div>
+                                            <div id="productChart" class="flot-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Unit 3</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit3</h3>
+                                            </div>
+                                            <div id="orderChart" class="flot-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Unit 4</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit4</h3>
+                                            </div>
+                                            <div id="earningChart" class="flot-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-sm-3">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Unit 5</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit5</h3>
+                                            </div>
+                                            <div id="earningChart" class="flot-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            @*<div class="col-sm-3">
+                                    <div class="card mb-3 mb-sm-0">
+                                        <div class="card-body py-3 px-4">
+                                            <p class="m-0 survey-head">Unit 1</p>
+                                            <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                                <div>
+                                                    <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit1</h3>
+                                                </div>
+                                                <div id="earningChart" class="flot-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @if (Model.UserUnitID == 2)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="card mb-3 mb-sm-0">
+                                        <div class="card-body py-3 px-4">
+                                            <p class="m-0 survey-head">Unit 2</p>
+                                            <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                                <div>
+                                                    <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit2</h3>
+                                                </div>
+                                                <div id="productChart" class="flot-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (Model.UserUnitID == 3)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body py-3 px-4">
+                                            <p class="m-0 survey-head">Unit 3</p>
+                                            <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                                <div>
+                                                    <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit3</h3>
+                                                </div>
+                                                <div id="orderChart" class="flot-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (Model.UserUnitID == 4)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="card">
+                                        <div class="card-body py-3 px-4">
+                                            <p class="m-0 survey-head">Unit 4</p>
+                                            <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                                <div>
+                                                    <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit4</h3>
+                                                </div>
+                                                <div id="earningChart" class="flot-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        if (Model.UserUnitID == 5)
+                        {
+                            <div class="row my-3">
+                                <div class="col-sm-3">
+                                    <div class="card mb-3 mb-sm-0">
+                                        <div class="card-body py-3 px-4">
+                                            <p class="m-0 survey-head">Unit 5</p>
+                                            <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                                <div>
+                                                    <h3 class="m-0 survey-value">@Model._UnitWiseList.Unit5</h3>
+                                                </div>
+                                                <div id="earningChart" class="flot-chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 stretch-card grid-margin">
+            <div class="card" style="background: darkseagreen;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <h5>OHC Details</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="card mb-3 mb-sm-0">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Today OPD</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">@Model.TodayPrescribe</h3>
+                                            @*<p class="text-success m-0">-310 avg. sales</p>*@
+                                        </div>
+                                        <div id="earningChart" class="flot-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card mb-3 mb-sm-0">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Today Issue</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">@Model.TodayIssue</h3>
+                                            @*<p class="text-danger m-0">-310 avg. sales</p>*@
+                                        </div>
+                                        <div id="productChart" class="flot-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Today Inspection</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">@Model.TodayInspection</h3>
+                                            @*<p class="text-success m-0">-310 avg. sales</p>*@
+                                        </div>
+                                        <div id="orderChart" class="flot-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="card">
+                                <div class="card-body py-3 px-4">
+                                    <p class="m-0 survey-head">Certified First Aider</p>
+                                    <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                        <div>
+                                            <h3 class="m-0 survey-value">@Model.TotalCertifiedfirstAider</h3>
+                                            @*<p class="text-success m-0">-310 avg. sales</p>*@
+                                        </div>
+                                        <div id="orderChart" class="flot-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row my-3">
+                            <div class="col-sm-4">
+                                <div class="card mb-3 mb-sm-0">
+                                    <div class="card-body py-3 px-4">
+                                        <p class="m-0 survey-head">Certified First Aider</p>
+                                        <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
+                                            <div>
+                                                <h3 class="m-0 survey-value">@Model.TotalCertifiedfirstAider</h3>
+                            <p class="text-success m-0">-310 avg. sales</p>
+                            </div>
+                                        <div id="earningChart" class="flot-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>*@
+                    @*<div class="row">
+                            <div class="col-sm-8">
+                                <p class="text-muted mb-0">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. <b>Learn More</b>
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p class="mb-0 text-muted">Sales Revenue</p>
+                                <h5 class="d-inline-block survey-value mb-0"> $2,45,500 </h5>
+                                <p class="d-inline-block text-danger mb-0"> last 8 months </p>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body px-0 overflow-auto">
+                    <h4 class="card-title pl-4">Medicine Status</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Qunatiy</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model._MedicineStatusList != null)
+                                {
+                                    foreach (var item in Model._MedicineStatusList)
+                                    {
+                                        <tr>
+                                            @if (item.Quantity <= 10)
+                                            {
+                                                <td>
+                                                    @item.MedicineName
+                                                </td>
+                                                <td><label class="badge badge-danger">@item.Quantity</label></td>
+                                            }
+                                            else if (item.Quantity <= 50)
+                                            {
+                                                <td>
+                                                    @item.MedicineName
+                                                </td>
+                                                <td><label class="badge badge-warning">@item.Quantity</label></td>
+                                            }
+                                            else if (item.Quantity > 50)
+                                            {
+                                                <td>
+                                                    @item.MedicineName
+
+                                                </td>
+                                                <td><label class="badge badge-success">@item.Quantity</label></td>
+                                            }
+
+
+                                            @*<td>
+                                                    <div class="badge badge-inverse-success"> Completed </div>
+                                                </td>*@
+
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>No Data Available</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title font-weight-medium"> Business Survey </div>
+                        <p class="text-muted"> Lorem ipsum dolor sitadipiscing elit, sed amet do eiusmod tempor we find a new solution </p>
+                        <div class="d-flex flex-wrap border-bottom py-2 border-top justify-content-between">
+                            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_3.jpg" alt="" />
+                            <div class="pt-2">
+                                <h5 class="mb-0">Villa called Archagel</h5>
+                                <p class="mb-0 text-muted">St, San Diego, CA</p>
+                                <h5 class="mb-0">$600/mo</h5>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
+                            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_1.jpg" alt="" />
+                            <div class="pt-2">
+                                <h5 class="mb-0">Luxury villa in Hermo</h5>
+                                <p class="mb-0 text-muted">Glendale, CA</p>
+                                <h5 class="mb-0">$900/mo</h5>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
+                            <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_2.jpg" alt="" />
+                            <div class="pt-2">
+                                <h5 class="mb-0">House on the Clarita</h5>
+                                <p class="mb-0 text-muted">Business Survey</p>
+                                <h5 class="mb-0">$459/mo</h5>
+                            </div>
+                        </div>
+                        <a class="text-black mt-3 d-block font-weight-medium h6" href="#">View all <i class="mdi mdi-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+</div>

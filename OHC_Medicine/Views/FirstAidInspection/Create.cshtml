@@ -1,0 +1,10 @@
+﻿@using OHCModel.Model
+@model FirstAidInspectionModel
+@{
+    ViewBag.Title = "First Aid Inspection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Create", "FirstAidInspection", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("CreateOrEdit");
+}

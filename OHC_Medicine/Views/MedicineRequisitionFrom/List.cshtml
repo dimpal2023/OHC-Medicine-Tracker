@@ -1,0 +1,72 @@
+﻿@using OHCModel.Model
+@model MedicineRequisitionFromModel
+@{
+    ViewBag.Title = "Medicine Requisition Form";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Medicine Requisition Form</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "MedicineRequisitionFrom")" type="button" class="btn btn-sm ml-3 btn-success"> Add New Medicine Requisition</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine Requisition Form</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+                                    <th>Unit Name</th>
+                                    <th>Department Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model._MedicineRequisitionFromList != null)
+                                {
+                                    foreach (var data in Model._MedicineRequisitionFromList)
+                                    {
+                                        <tr>
+                                            <td class="py-1">@(++i)</td>
+                                            <td>@data.Unit</td>
+                                            <td>@data.DepartmentName</td>
+                                            @if (@data.Status == "Open")
+                                            {
+                                                <td> <label class="badge badge-info">@data.Status</label> </td>
+                                            }
+                                            else
+                                            {
+                                                <td> <label class="badge badge-danger">@data.Status</label> </td>
+                                            }
+
+                                            <td class="textcenter">
+                                                <a href="@Url.Action("Edit", "MedicineRequisitionFrom", new { ID = @data.MedicineRequisitionID })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                                @if(data.Status != "Close" && Model.UserUnitID == 1)
+                                                {
+                                                <a href="@Url.Action("Create", "MedicineIssuancetootherunitfirstadd", new { ID = @data.MedicineRequisitionID })" class="btn btn-info" title="Issuance">Issue</a>
+                                                }
+                                            </td>
+                                            @*<td class="textcenter">
+                                                    <a href="@Url.Action("Create", "MedicineIssuancetootherunitfirstadd", new { ID = @data.MedicineRequisitionID })" class="btn btn-primary" title="Issuance"><span class="mdi mdi-table-settings"></span></a>
+                                                </td>*@
+                                        </tr>
+                                    }
+                                }
+                                @*else
+                                    {<tr>
+                                        "No Data Available";</tr>
+                                    }*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

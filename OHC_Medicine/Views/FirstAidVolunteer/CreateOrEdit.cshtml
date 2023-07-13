@@ -1,0 +1,174 @@
+﻿@model OHCModel.Model.FAVModel
+@{
+    ViewBag.Title ="Certified first Aider";
+    int i = 0;
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Certified first Aider</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> Certified first Aider</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Certified first Aider</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Unit</label>
+                                    @Html.DropDownListFor(m => m.Unit, Model._UnitList, new { @id = "ddlUnit", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Department Name</label>
+                                    @Html.DropDownListFor(m => m.DepartmentName, Model._DepartmentList, new { @id = "DDLDepartmentName", @class = "form-control m-input" })
+                                    @Html.HiddenFor(m => m.Id)
+                                    @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Emp Code</label>
+                                    @Html.TextBoxFor(m => m.EMPCode, new { @id = "txtEMPCode", @class = "form-control m-input", @Placeholder = "Search Employee Code" })
+                                    @Html.ValidationMessageFor(m => m.EMPCode, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Volunteer</label>
+                                    @Html.TextBoxFor(m => m.VolunteerName, new { @id = "txtVolunteerName", @Placeholder = "Volunteer Name", @class = "form-control", @required = "required", @readonly = "true" })
+                                    @Html.ValidationMessageFor(m => m.VolunteerName, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label for="Status">MobileNo.</label>
+                                    @Html.TextBoxFor(m => m.MobileNo, new { @id = "txtMobile", @class = "form-control m-input", @maxlength = "10", @minlength = "10", @onkeypress = "return event.charCode >= 48 && event.charCode <= 57" })
+                                    @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Address</label>
+                                    @Html.TextBoxFor(m => m.Address, new { @id = "txtAddress", @class = "form-control m-input", @Placeholder = "Address" })
+                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label for="Status">Status</label>
+                                    @Html.DropDownListFor(m => m.Status, Model._StatusList, new { @id = "ddltStatus", @class = "form-control m-input" })
+
+                                </div>
+                            </div>
+                            <div class="column">
+                            </div>
+                            <div class="column">
+                            </div>
+                        </div>
+
+                        @if (Model.Id == 0)
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                        }
+                        <a class="btn btn-light" href="/FirstAidVolunteer/List">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/assets/css/jquery.ui.css" rel="stylesheet" />
+<script src="~/assets/js/jquery-ui.js"></script>
+<script>
+    $("#txtEMPCode").autocomplete({
+
+        max: 10,
+        minLength: 1,
+        source: function (request, response) {
+            debugger;
+            $.ajax({
+                url: "/Utility/FindEmployee_Data",
+                datatype: "json",
+                data: {
+                    Type: 1,
+                    query: $('#txtEMPCode').val()
+                },
+                success: function (data) {
+                    debugger;
+                    if (!data.length) {
+                        var result = [{ label: "no results", value: response.term }];
+                        response(result);
+                    }
+                    else {
+                        response($.map(data, function (val, item) {
+                            debugger;
+                            return {
+                                label: val.Name + ' - ' + val.Empid,
+                                value: val.Empid,
+                                empname: val.Name,
+                                empMobile: val.Mobile,
+                                empaddress: val.Address,
+                            }
+                        }))
+                    }
+                }
+            })
+        },
+        select: function (event, ui) {
+            $("#txtVolunteerName").val(ui.item.empname);
+            $("#txtMobile").val(ui.item.empMobile);
+            $("#txtAddress").val(ui.item.empaddress);
+
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
+</script>

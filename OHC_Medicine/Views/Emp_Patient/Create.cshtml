@@ -1,0 +1,11 @@
+﻿@using OHCModel.Model
+
+@model Emp_PatientModel
+@{
+    ViewBag.Title = "Employee Cum Patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Create", "Emp_Patient", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("EmpPatient");//Emp_Patient
+}

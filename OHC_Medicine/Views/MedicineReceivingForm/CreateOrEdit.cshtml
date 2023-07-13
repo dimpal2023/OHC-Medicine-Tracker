@@ -1,0 +1,154 @@
+﻿@model OHCModel.Model.MedicineReceivingFormModel
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .column {
+        flex: 33%;
+        padding: 2px;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Medicine Receiving Form</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> Medicine Receiving Form </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine Receiving Form</h4>
+                    <p class="card-description">&nbsp;</p>
+                    <form class="forms-sample">
+
+
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Medicine Name</label>
+                                    @Html.DropDownListFor(m => m.Medicinename, Model._MedicineNameList, new { @id = "Medicinename", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.Medicinename, "", new { @class = "m-form__help" })
+                                    @Html.HiddenFor(m => m.id)
+                                    @Html.HiddenFor(m => m.Medicinename)
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">HSN Number</label>
+                                    @Html.TextBoxFor(m => m.HSNNumber, new { @id = "HSNNumber", @Placeholder = "HSNNumber", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.HSNNumber, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Pack</label>
+                                    @Html.DropDownListFor(m => m.Pack, Model._PackList, new { @id = "Pack", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.Pack, "", new { @class = "m-form__help" })
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Quantity</label>
+                                    @Html.TextBoxFor(m => m.Quantity, new { @id = "Quantity", @Placeholder = "Quantity", @class = "form-control", @required = "required", @onkeypress = "return isNumberKey(event,this)" })
+                                    @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Batch Number</label>
+                                    @Html.TextBoxFor(m => m.BatchNumber, new { @id = "BatchNumber", @Placeholder = "Batch Number", @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.BatchNumber, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Rate</label>
+                                    @Html.TextBoxFor(m => m.Rate, new { @id = "Rate", @Placeholder = "Rate", @class = "form-control", @required = "required", @onkeypress = "return isNumberKey(event,this)" })
+                                    @Html.ValidationMessageFor(m => m.Rate, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Expiry Date</label>
+                                    @Html.TextBoxFor(m => m.ExpiryDate, new { @id = "txtExpiryDate", @Placeholder = "ExpiryDate", @class = "form-control", @required = "required", @type = "Date" })
+                                    @Html.ValidationMessageFor(m => m.ExpiryDate, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    <label class="required" for="DepartmentName">Vendor Name</label>
+                                    @Html.DropDownListFor(m => m.VenderName, Model._VenderNameList, new { @id = "VenderName", @class = "form-control m-input" })
+                                    @Html.ValidationMessageFor(m => m.VenderName, "", new { @class = "m-form__help" })
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="form-group">
+                                    @*<label for="DepartmentName">Vender Name</label>
+                                        @Html.DropDownListFor(m => m.VenderName, Model._VenderNameList, new { @id = "VenderName", @class = "form-control m-input" })
+                                        @Html.HiddenFor(m => m.id)*@
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.id == 0)
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Submit </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary mr-2"> Update </button>
+                        }
+                        <button type="button" class="btn btn-light" onclick="location.href='@Url.Action("List", "MedicineReceivingForm")'">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Medicinename = @Html.Raw(Json.Encode(Model.Medicinename));
+        if (Medicinename >= 1) {
+            $('#Medicinename').attr("disabled", true);
+        }
+        
+        if (Medicinename < 1) {
+            var tdate = new Date();
+            var dd = tdate.getDate(); //yields day
+            var MM = tdate.getMonth(); //yields month
+            var yyyy = tdate.getFullYear(); //yields year
+            var currentDate = yyyy + "-" + (MM + 1) + "-" + dd;
+            if (MM < 10) {
+                MM = "0" + (MM + 1);
+                currentDate = yyyy + "-" + MM + "-" + dd;
+            }
+            return $('#txtExpiryDate').val(currentDate);
+        }
+    })
+    
+    
+</script>
+
+
+
+
+
+

@@ -1,0 +1,68 @@
+﻿@using OHCModel.Model
+@model FAVModel
+@{
+    ViewBag.Title = "Certified first Aider";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Certified first Aider</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "FirstAidVolunteer")" type="button" class="btn btn-sm ml-3 btn-success"> Add New First Aider </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Certified first Aider</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+                                    <th>Unit</th>
+                                    <th>Department Name</th>
+                                    <th>Certified First Aider</th>
+                                    <th>MobileNO</th>
+                                    <th>EmpCode Name</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var data in Model._FAVModelList)
+                                {
+                                    <tr>
+                                        <td class="py-1">@(++i)</td>
+                                        <td>@data.Unit</td>
+                                        <td>@data.DepartmentName</td>
+                                        <td>@data.VolunteerName</td>
+                                        <td>@data.MobileNo</td>
+                                        <td>@data.EMPCode</td>
+                                        <td>@data.Address</td>
+                                        @if (@data.Status == "Active")
+                                        {
+                                            <td> <label class="badge badge-info">@data.Status</label> </td>
+                                        }
+                                        else
+                                        {
+                                            <td> <label class="badge badge-danger">@data.Status</label> </td>
+                                        }
+                                        <td class="textcenter">
+                                            <a href="@Url.Action("Edit", "FirstAidVolunteer", new { ID = @data.Id })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

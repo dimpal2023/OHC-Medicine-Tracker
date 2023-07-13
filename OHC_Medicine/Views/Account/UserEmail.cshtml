@@ -1,0 +1,142 @@
+﻿
+@using OHCModel.Model
+@model LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Forgot Password</title>
+    <link rel="shortcut icon" type="image/png" href="../../img/Karam.png" />
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="~/Content/css/maruti-login.css" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+    <style>
+        .m-form__help {
+            font-size: 72%;
+            display: inline-block;
+            color: red;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+
+       
+    </style>
+</head>
+<body>
+
+
+    @*<div class="container-scroller">
+
+        <div class="container-fluid page-body-wrapper">
+
+            <div class="main-panel">*@
+
+
+
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">Forgot Password</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#"></a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Forgot Password </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Forgot Password</h4>
+                        <p class="card-description">&nbsp;</p>
+
+                        <div id="loginbox">
+                            @using (Html.BeginForm("UserEmail", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                            <form id="recoverform" action="#" class="form-vertical">
+                                <p class="normal_text">Enter your e-mail address below and we will send you OTP to recover a password.</p>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="required" for="DepartmentName">Email</label>
+
+                                            @Html.TextBoxFor(m => m.Email, new { @Placeholder = "Email", @class = "form-control", @id = "txtuserEmail", @autocomplete = "off" })
+                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "m-form__help" })
+                                            <span class="text-center errormsg" style="color:red;text-align:center;margin-left:5%"> @Html.Raw(@ViewBag.Message)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="form-actions">
+                                        <span class="pull-left"><a href="~/Account/Index" class="flip-link btn btn-inverse" id="to-login">&laquo; Back to login</a></span>
+                                        @*<span class="pull-right"><input type="submit" class="btn btn-info" value="Recover" /></span>*@
+                                        <span class="pull-right btnemailSubmit"><button type="submit" class="btn btn-info">Send OTP</button></span>
+                                    </div>
+                                   
+                            </form>
+
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="~/assets/vendors/mdi/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="~/assets/vendors/flag-icon-css/css/flag-icon.min.css" />
+    <link rel="stylesheet" href="~/assets/vendors/css/vendor.bundle.base.css" />
+    <link rel="stylesheet" href="~/assets/vendors/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/css/style.css" />
+
+
+
+
+
+
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/js/maruti.login.js"></script>
+    <script>
+
+        //$(document).ready(function () {
+        //    alert('kkk');
+        //});
+
+
+
+        $('.btnemailSubmit').click(function () {
+
+            if ($("#txtuserEmail").val() == '' || $("#txtuserEmail").val() == null) {
+                $(".errormsg").text("");
+                $(".errormsg").text("Please Enter Email1.");
+                return false;
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>

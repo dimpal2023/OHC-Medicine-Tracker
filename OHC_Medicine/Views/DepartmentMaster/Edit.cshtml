@@ -1,0 +1,7 @@
+﻿@using OHCModel.Model
+@model DepartmentMasterModel
+
+@using (Html.BeginForm("Edit", "DepartmentMaster", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.RenderPartial("Department");
+}

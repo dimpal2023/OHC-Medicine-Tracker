@@ -1,0 +1,65 @@
+﻿@using OHCModel.Model
+@model FirstAidInspectionModel
+@{
+    ViewBag.Title = "First Aid Inspection";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">First Aid Inspection</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "FirstAidInspection")" type="button" class="btn btn-sm ml-3 btn-success"> Add New First Aid Inspection</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">First Aid Inspection</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+                                    <th>Unit Name</th>
+                                    <th>Department Name</th>
+                                    <th>Location</th>
+                                    <th>Shift</th>
+                                    <th>Frequency</th>
+                                    <th>Date Of Inspection</th>
+                                    <th>Next Due On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model._FirstAidInspectionModelList != null)
+                                {
+                                    foreach (var data in Model._FirstAidInspectionModelList)
+                                    {
+                                        <tr>
+                                            <td class="py-1">@(++i)</td>
+                                            <td>@data.Unit</td>
+                                            <td>@data.DepartmentName</td>
+                                            <td>@data.Location</td>
+                                            <td>@data.Shift</td>
+                                            <td>@data.Frequency</td>
+                                            <td>@data.DateOfInspection</td>
+                                            <td>@data.NextDueOn</td>
+                                            <td class="textcenter">
+                                                <a href="@Url.Action("Edit", "FirstAidInspection", new { ID = @data.FirstAidInspectionID })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                @*else
+                                {<tr>
+                                    "No Data Available";</tr>
+                                }*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

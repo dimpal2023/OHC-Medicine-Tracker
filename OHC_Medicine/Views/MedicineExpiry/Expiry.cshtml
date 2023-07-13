@@ -1,0 +1,91 @@
+﻿@using OHCModel.Model
+@model MedicineExpiryModel
+
+@{
+    ViewBag.Title = "Expiry Medicine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine Expiry List</h4>
+                    <p class="card-description">&nbsp;</p>
+                    @using (Html.BeginForm("Expiry", "MedicineExpiry", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="row">
+                            <div class="col-sm-3 form-group">
+                                <label class="required" for="Status">Medicine Name</label>
+                                @Html.DropDownListFor(m => m.MedicineName, Model._MedicineNameList, new { @id = "ddltStatus", @class = "form-control m-input" })
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <button class="btn btn-primary mr-2" style="margin-top: 20px;" id="btnSearch" type="submit">Search</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SR No.</th>
+                                            <th>Medicine Name</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Expiry Date</th>
+                                            <th>Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.medicineExpiryModels != null)
+                                        {
+                                            foreach (var data in Model.medicineExpiryModels)
+                                            {
+                                                <tr>
+                                                    <td class="py-1">@(++i)</td>
+                                                    <td>@data.MedicineName</td>
+                                                    <td>@data.Quantity</td>
+
+                                                    @if (@data.Status == "1")
+                                                    {
+                                                        <td> <label class="badge badge-info">Active</label> </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td> <label class="badge badge-danger">InActive</label> </td>
+                                                    }
+                                                    <td>@data.MedicineExpiryDate</td>
+                                                    @if (@data.UnitID == 1)
+                                                    {
+                                                        <td>UNIT I</td>
+                                                    }
+                                                    else if (@data.UnitID == 2)
+                                                    {
+                                                        <td>UNIT II</td>
+                                                    }
+                                                    else if (@data.UnitID == 3)
+                                                    {
+                                                        <td>UNIT III</td>
+                                                    }
+                                                    else if (@data.UnitID == 4)
+                                                    {
+                                                        <td>UNIT IV (SANDILA)</td>
+                                                    }
+                                                    else if (@data.UnitID == 5)
+                                                    {
+                                                        <td>PNS</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

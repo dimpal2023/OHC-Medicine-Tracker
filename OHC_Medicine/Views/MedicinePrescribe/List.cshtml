@@ -1,0 +1,312 @@
+﻿@using OHCModel.Model
+
+@model MedicinePrescribeModel
+@{
+    ViewBag.Title = "OPD Patient List";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">OPD Patient List</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "MedicinePrescribe")" type="button" class="btn btn-sm ml-3 btn-success"> Add New OPD Patient </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">OPD Patient List</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+                                    @*<th>Id</th>*@
+                                    <th>Employee Name</th>
+                                    <th>Problem</th>
+                                    <th>Gender</th>
+                                    <th>Unit</th>
+                                    <th>Department</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Suggested By</th>
+                                    <th>Treatment</th>
+                                    <th>Checkup</th>
+                                    <th>Status</th>
+                                    <th>Fitness Certificate</th>
+                                    @*<th>Status</th>*@
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var data in Model._MedicinePrescribeModelList)
+                                {
+                                    <tr>
+                                        <td class="py-1">@(++i)</td>
+                                        @*<td>@data.Id</td>*@
+                                        <td>@data.EmployeeName</td>
+                                        <td>@data.Problem</td>
+                                        <td>@data.Gender</td>
+                                        <td>@data.Unit</td>
+                                        <td>@data.Department</td>
+                                        <td>@data.Date</td>
+                                        <td>@data.Time</td>
+                                        <td>@data.SuggestedBy</td>
+                                        <td>@data.Treatment</td>
+                                        <td>@data.CheckUpVital</td>
+                                        <td>@data.PatientStatusCloseDiscription</td>
+                                        <td>@data.PatientFitnessCertificate</td>
+                                        @*@if (@data.IsActive == "Active")
+                                            {
+                                                <td> <label class="badge badge-info">@data.IsActive</label> </td>
+                                            }
+                                            else
+                                            {
+                                                <td> <label class="badge badge-danger">@data.IsActive</label> </td>
+                                            }*@
+                                    <td class="textcenter">
+                                        <a href="@Url.Action("Edit", "MedicinePrescribe", new { ID = @data.Id })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                        @if (data.IsReffered ==true)
+                                        {
+                                            <a href="javascript:void(0);" class="btn btn-dark" title="Medicnie Treatment Slip" onclick="return GenerateMedicineTreatmentSlipPdf(@data.Id)"><span class="mdi mdi-printer"></span></a>
+                                        }
+                                    </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="partialDivds" style="display:none">
+        <br /><br /><br />
+        <h3>No data found..</h3>
+        <div id="editor"></div>
+    </div>
+</div>
+@*<script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>*@
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>*@
+<script src="~/assets/js/jspdf.js"></script>
+
+<script type="text/javascript">
+    function GenerateMedicineTreatmentSlipPdf(Id) {
+        /*$("#partialDivds").empty();*/
+        $.ajax({
+            url: "/MedicinePrescribe/MedicineTreatmentSlip",
+            datatype: "json",
+            data: {
+                Id: Id
+            },
+            success: function (data) {
+                debugger;
+                if (data != null) {
+                    debugger;
+                    var html = '';
+                    html += '<div>';
+                    html += "<table class='table table-bordered scrolldown'>";
+                    html += "<thead>";
+                    html += "<tr>";
+                    html += "<th style='border:1px solid black;height:50;width:40'><img src='http://localhost:63850/assets/images/karam.png'/></th>";
+                    html += "<th colspan='4' style='border:1px solid black;'><h3 style='text-align:center'><span><b>Medical Treatment Slip</b></span> <br/> <span><b>PN International Pvt Ltd.</b></span> <br/></h3> </th>";
+                    html += '<th colspan="2" style="border:1px solid black;width:40"><h3 style="text-align:center"><span><b>' + data.HospitalName + '</b></span><br/></h3> </th>';
+                    html += '<th colspan="4" style="border:1px solid black;">';
+                    html += "<table class='table table-bordered scrolldown'>";
+                    html += "<thead>";
+                    html += "<tr>"
+                    html += "<td style='border: 1px solid black;width:70;'>Doc.No</td>"
+                    html += "<td style='border: 1px solid black;'></td>"
+                    html += "</tr>"
+                    html += "<tr>"
+                    html += "<td style='border: 1px solid black;width:70;'>Issue Dt.</td>"
+                    html += "<td style='border: 1px solid black;'></td>"
+                    html += "</tr>"
+                    html += "<tr>"
+                    html += "<td style='border: 1px solid black;width:70;'>Rev.& Dt.</td>"
+                    html += "<td style='border: 1px solid black;'></td>"
+                    html += "</tr>"
+                    html += "</thead>";
+                    html += "</table>";
+                    html += '</th >';
+                    html += "</tr>";
+                    html += "</thead>";
+                    html += "<tbody>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Employee Name</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.EmployeeName + '</td>'
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Department</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.Department + '</td>'
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Employee Code</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.EmployeeCode + '</td>'
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>First Aider Name</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.AttendeeName + '</td>'
+                    html += "</tr>";
+                    //html += "<tr>";
+                    //html += "<td colspan='2' style='border:1px solid black;'><b>Unit</b></td>";
+                    //html += '<td colspan="10" style="border: 1px solid black;">' + $("#ddlUnit").val() + '</td>'
+                    //html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Treatment Required</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.Treatment + '</td>'
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Starting Date Of Treatment</b></td>";
+                    html += '<td colspan="3" style="border: 1px solid black;text-align: left;">' + data.Date + '</td>'
+                    html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black;"></td>'
+                    /*html += '<td colspan="3" style="border: 1px solid black;"></td>'*/
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td colspan='2' style='border:1px solid black;text-align: left;'><b>Send By</b></td>";
+                    html += '<td colspan="10" style="border: 1px solid black;text-align: left;">' + data.RefferbyVehicle + '</td>'
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += '<td colspan="12" style="border:1px solid black;height:20;text-align: center;"><h3><span><b>Treatment Expenses</b></span></h3></td>';
+                    html += '<table>'
+                    html += '<thead>'
+                    html += '<tr>'
+                    html += '<th colspan="3" style="border: 1px solid black;">Date</th>'
+                    html += '<th colspan="3" style="border: 1px solid black;">Treatment Done By Doctor</th>'
+                    html += '<th colspan="3" style="border: 1px solid black;">Amount</th>'
+                    html += '<th colspan="3" style="border: 1px solid black; height:20;">Hospital Representaive Signature</th>'
+                    html += '</tr>'
+                    html += '</thead>'
+                    html += '<tbody>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '<td colspan="3" style="border: 1px solid black; height:30;"></td>'
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="3" style="border:1px solid black;">Signature Safety Department</td>'
+                    html += '<td colspan="9" style="border: 1px solid black;text-align:center">Hospital Address:KBC-27,Sector-B,Opp. Phonix Mall,<br/>Kanpur Road,AlamBagh Lucknow-226010</td>'
+                    html += '</tr>'
+                    html += '</tbody>'
+                    html += '</table>'
+                    html += '<table>'
+                    html += '<tbody>'
+                    html += '</tbody>'
+                    html += '<tr>'
+                    html += '<td colspan="12" style="border:1px solid black;text-align:center;margin-top:30px;vertical-align: bottom;"><h3><span><b>Contact Detail</b></span></h3></td>';
+                    html += '</tr>'
+                    html += '<tr>'
+                    html += '<td colspan="4" style="border:1px solid black;">SKD Hospital <br/> +91 8388526262 <br/> 0522-4044111/4021010</td>'
+                    html += '<td colspan="4" style="border:1px solid black;">Occupational Health Center <br/> 9653038762</td>'
+                    html += '<td colspan="4" style="border:1px solid black;">Safety Officer <br/> 9076843512,8009785601, 9695001116, <br/> 9559996662</td>'
+                    html += '</tr>'
+                    html += '</table>'
+                    html += "</tr>";
+                    html += "</tbody>";
+                    html += "</table>";
+                    html += '</div>';
+                    $("#partialDivds").append(html);
+                    var contents = $("#partialDivds").html();
+                    PdfGenerate(html);
+                    //PdfGenerate(contents);
+                    //saveDiv(html);
+                    //var contents = $("#partialDivds").html();
+                    //var result = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+                    ///*var result = 'data:application/pdf,' + encodeURIComponent(html);*/
+                    //var link = document.createElement("a");
+                    //document.body.appendChild(link);
+                    //link.download = "MedicalTreatmentSlip-"+$("#txtHospitalName").val()+".xls"; //You need to change file_name here.
+                    //link.href = result;
+                    //link.click();
+                }
+
+            }
+        })
+
+
+    }
+
+    function PdfGenerate(html) {
+        debugger;
+        var sTable = html;
+        var style = "<style>";
+        style = style + "table {width: 100%;font: 17px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + "</style>";
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write('<html><head>');
+        win.document.write('<title>Medicine Treatment Slip</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+        win.print();
+    }
+</script>
+<script type="text/javascript">
+    //var doc = new jsPDF();
+    //function saveDiv(html) {
+    //    debugger
+    //    doc.fromHTML(`<html><head><title>'Medicine Treatment Slip'</title></head><body>` + $("#partialDivds").append() + `</body></html>`);
+    //    doc.save('div.pdf');
+    //}
+
+    //var doc = new jsPDF();
+    //var specialElementHandlers = {
+    //    '#editor': function (element, renderer) {
+    //        return true;
+    //    }
+    //};
+    //function PdfGenerate(contents) {
+    //    debugger;
+    //    var doc = new jsPDF();
+    //    doc.fromHTML(contents, 20, 20, {
+    //        'width': 200,
+    //        'elementHandlers': specialElementHandlers
+    //    });
+    //    doc.save('MedicalTreatmentSlip.pdf');
+    //};
+</script>

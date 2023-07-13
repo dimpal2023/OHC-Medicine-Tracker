@@ -1,0 +1,63 @@
+﻿@using OHCModel.Model
+@model MedicineMasterModel
+@{
+    ViewBag.Title = "Medicine List";
+    int i = 0;
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Medicine List</h3>
+        <div class="d-flex">
+            <a href="@Url.Action("Create", "MedicineMaster")" type="button" class="btn btn-sm ml-3 btn-success"> Add New Medicine </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Medicine List</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>SR No.</th>
+
+                                    <th>Medicine Name</th>
+                                    <th>Status</th>
+                                    <th>Remark</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach (var data in Model._MedicineMasterModel)
+                                {
+                                    <tr>
+                                        <td class="py-1">@(++i)</td>
+                                        <td>@data.MedicineName</td>
+
+                                        @if (@data.Status == "Active")
+                                        {
+                                            <td> <label class="badge badge-info">@data.Status</label> </td>
+                                        }
+                                        else
+                                        {
+                                            <td> <label class="badge badge-danger">@data.Status</label> </td>
+                                        }
+                                        <td>@data.Remark</td>
+                                        <td class="textcenter">
+                                            <a href="@Url.Action("Edit", "MedicineMaster", new { ID = @data.Id })" class="btn btn-primary" title="Edit"><span class="mdi mdi-table-edit"></span></a>
+                                        </td>
+                                    </tr>
+
+                                }  
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
